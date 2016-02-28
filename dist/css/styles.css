@@ -1,0 +1,14 @@
+body {
+  background-color: #333;
+}
+
+canvas{
+	margin: auto;
+}
+
+#dude-football {
+  	width: 800px;
+  	margin-left: auto;
+  	margin-right: auto;
+  	cursor: pointer;
+}
