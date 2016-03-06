@@ -8,11 +8,29 @@
   <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <div id="dude-football"></div>
-  <script src="js/phaser.js"></script>
-  <script src="js/game.js"></script>
+	<div id="dude_football"></div>
+	<script src="js/lib/phaser_dudefootball.min.js"></script>
+	<script src="js/player.js"></script>
+	<script src="js/states/boot.js"></script>
+	<script src="js/states/preload.js"></script>
+	<script src="js/states/menu.js"></script>
+	<script src="js/states/play.js"></script>
+	<script src="js/states/gameover.js"></script>
 
+	<script type="text/javascript">
+		//global variables
+		window.onload = function () {
+			var game = new Phaser.Game(900, 600, Phaser.AUTO, 'dude_football');
 
+			//añado las 'pantallas'
+			game.state.add('Boot', DudeFootball.Boot);
+			game.state.add('Preload', DudeFootball.Preload);
+			game.state.add('Menu', DudeFootball.Menu);
+			game.state.add('Play', DudeFootball.Play);
+			game.state.add('GameOver', DudeFootball.GameOver);
 
+			game.state.start('Boot');
+		};
+	</script>
 </body>
 </html>
