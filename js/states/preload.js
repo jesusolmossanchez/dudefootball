@@ -12,12 +12,15 @@ DudeFootball.Preload.prototype = {
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
         this.load.setPreloadSprite(this.preloader);
         this.load.spritesheet('jugador','assets/jugador.png',40,55);
+        this.load.spritesheet('jugador_cpu','assets/jugador_cpu.png',40,55);
 
         
         this.load.image('pelota', 'assets/pelota.png');
         this.load.image('background', 'assets/background.jpg');
 
         this.load.image('suelo_fake', 'assets/suelo_fake.png');
+        this.load.image('jugador_activo', 'assets/jugador_activo.png');
+        this.load.image('sombra_jugador', 'assets/sombra_jugador.png');
 
         this.load.image('cargador1', 'assets/cargador.png');
 
