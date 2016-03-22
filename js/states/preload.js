@@ -11,8 +11,8 @@ DudeFootball.Preload.prototype = {
 
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
         this.load.setPreloadSprite(this.preloader);
-        this.load.spritesheet('jugador','assets/jugador.png',40,55);
-        this.load.spritesheet('jugador_cpu','assets/jugador_cpu.png',40,55);
+        this.load.spritesheet('jugador','assets/jugador.png',72,100);
+        this.load.spritesheet('jugador_cpu','assets/jugador_cpu.png',72,100);
 
         
         this.load.image('pelota', 'assets/pelota.png');

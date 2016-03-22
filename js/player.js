@@ -12,14 +12,14 @@ function Player(juego, x, y, cpu){
 
 
 	//Añado la imagen
-	this.fake_sprite = juego.add.sprite(x, y+30, 'fake_sprite_jugador');
-	this.marca_activo = juego.add.sprite(x+20, y-25, 'jugador_activo');
+	this.fake_sprite = juego.add.sprite(x, y + 70, 'fake_sprite_jugador');
+	this.marca_activo = juego.add.sprite(x+35, y-25, 'jugador_activo');
 	this.sombra = juego.add.sprite(x, y+35, 'sombra_jugador');
 	this.sprite.anchor.setTo(0.5, 0.5);
 	this.fake_sprite.anchor.setTo(0.5, 0);
 	this.marca_activo.anchor.setTo(0.5, 0.5);
 	this.sombra.anchor.setTo(0.5, 0.5);
-    this.fake_sprite.alpha = 0;
+    this.fake_sprite.alpha = 1;
     this.marca_activo.alpha = 0;
     this.sombra.alpha = 0.1;
 
@@ -27,6 +27,7 @@ function Player(juego, x, y, cpu){
 
 	//Animación
 	this.sprite.animations.add('semueve', [0,1], 7, true);
+	this.sprite.animations.add('aturdido', [2], 5, true);
 
 	//Añado la fisica
 	juego.physics.arcade.enable(this.sprite);
@@ -54,6 +55,7 @@ function Player(juego, x, y, cpu){
 
 	this.chute_time = juego.time.now;
 	this.lanzado_time = juego.time.now;
+	this.aturdido_time = juego.time.now;
 
 	//Situación de la pelota
     this.pelota_arriba = false;
@@ -65,8 +67,8 @@ function Player(juego, x, y, cpu){
 
 	this.ajusta_fake = function(){
 		this.fake_sprite.body.position.x = this.sprite.body.position.x + 5;
-		this.fake_sprite.body.position.y = this.sprite.body.position.y + 30;
-		this.marca_activo.position.x = this.sprite.body.position.x + 20;
+		this.fake_sprite.body.position.y = this.sprite.body.position.y + 70;
+		this.marca_activo.position.x = this.sprite.body.position.x + 35;
 		this.marca_activo.position.y = this.sprite.body.position.y - 25;
 		this.marca_activo.alpha = 0;
 	},
@@ -74,14 +76,14 @@ function Player(juego, x, y, cpu){
 	this.ajusta_fake_saltando = function(){
 		this.fake_sprite.body.position.x = this.sprite.body.position.x + 5;
 		this.fake_sprite.body.position.y = this.sprite.body.position.y;
-		this.marca_activo.position.x = this.sprite.body.position.x + 20;
+		this.marca_activo.position.x = this.sprite.body.position.x + 35;
 		this.marca_activo.position.y = this.sprite.body.position.y - 25;
 		this.marca_activo.alpha = 0;
 	},
 
 	this.ajusta_sombra = function(){
 		this.sombra.position.x = this.sprite.position.x;
-		this.sombra.position.y = this.sprite.position.y + 30;
+		this.sombra.position.y = this.sprite.position.y + 50;
 	},
 
 	this.ajusta_sombra_saltando = function(){
@@ -135,7 +137,7 @@ function Player(juego, x, y, cpu){
     	//this.sprite.animations.play('salta');
     	
     	//Pongo el suelo del jugador en su sitio
-    	this.suelo_saltando_fake.body.position.y = this.sprite.body.position.y + 55;
+    	this.suelo_saltando_fake.body.position.y = this.sprite.body.position.y + 75;
     	
     	//Velocidad de salto
 		this.sprite.body.velocity.y = -juego.velocidad_salto;
@@ -230,8 +232,15 @@ function Player(juego, x, y, cpu){
     	}
     }
 
+    this.check_distancia = function(posicion) {
+		var dist = Math.sqrt( Math.pow((posicion.x-this.sprite.body.position.x), 2) + Math.pow((posicion.y-this.sprite.body.position.y), 2) );   	
+    	return dist;
+    }
+
     this.aturdir = function(posicion) {
-		console.log("me quedo loco!")
+		console.log("me quedo loco!");
+		this.sprite.animations.play('aturdido');
+		this.aturdido_time = juego.time.now + juego.tiempo_aturdido;
     }
 
 }
