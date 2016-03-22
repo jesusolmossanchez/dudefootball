@@ -129,7 +129,7 @@ DudeFootball.Play.prototype = {
         this.game.camera.deadzone = this.rectangulo_deadzone;
 
 
-        this.graphics = this.game.add.graphics(400,480);
+        this.graphics = this.game.add.graphics(360,480);
         this.graphics.fixedToCamera = true;
 
     },

@@ -19,7 +19,7 @@ function Player(juego, x, y, cpu){
 	this.fake_sprite.anchor.setTo(0.5, 0);
 	this.marca_activo.anchor.setTo(0.5, 0.5);
 	this.sombra.anchor.setTo(0.5, 0.5);
-    this.fake_sprite.alpha = 1;
+    this.fake_sprite.alpha = 0;
     this.marca_activo.alpha = 0;
     this.sombra.alpha = 0.1;
 
