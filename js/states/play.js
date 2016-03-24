@@ -53,12 +53,12 @@ DudeFootball.Play.prototype = {
         this.velocidad_centro_y = 500;
         this.velocidad_centro_x = 400;
 
-        this.velocidad_aturdir = 300;
+        this.velocidad_aturdir = 900;
 
         this.tiempo_centrando = 1200;
-        this.tiempo_chutando = 300;
+        this.tiempo_chutando = 150;
         this.game.tiempo_lanzandose = 250;
-        this.game.tiempo_aturdido = 3000;
+        this.game.tiempo_aturdido = 2000;
 
         this.gravedad_pelota_centrando = 900;
 
@@ -67,9 +67,11 @@ DudeFootball.Play.prototype = {
 
 
         //Este valor es la amplitud con la se despliega el equipo en el campo [valores de 0.5 a 2]
-        this.amplitud_equipo = 2;
+        this.amplitud_equipo = 1.8;
         //Este valor es lo que presiona o se recoge un equipo 
         this.factor_ataque = 0;
+
+        this.factor_bascula_y = 1.3;
 
         //Distancia a la que permito que cambie el jugador activo
         this.distancia_cambio_activo = 300;
@@ -98,7 +100,7 @@ DudeFootball.Play.prototype = {
         this.equipo_CPU.jugadores.push(new Player(this.game, 1800, 750, true));
         this.equipo_CPU.jugadores.push(new Player(this.game, 1500, 250, true));
         this.equipo_CPU.jugadores.push(new Player(this.game, 1500, 750, true));
-
+        
         this.jugador_rival_activo = this.equipo_CPU.jugadores[0];
 
 
@@ -158,13 +160,19 @@ DudeFootball.Play.prototype = {
         this.pinta_minimapa();
 
         //Pongo angulo de la pelota según la velocidad
-        this.pelota.sprite.angle += (this.pelota.sprite.body.velocity.x+this.pelota.sprite.body.velocity.y)/30;
+        this.pelota.sprite.angle += this.pelota.sprite.body.velocity.x/30;
         //Freno por rozamiento de la pelota
         this.pelota.frena();
 
 
         //Para todos los jugadores:
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) {
+            if (this.equipo_jugador.jugadores[i].sprite.body.velocity.x < 0){
+                this.equipo_jugador.jugadores[i].sprite.scale.x = -1;
+            }
+            else{
+                this.equipo_jugador.jugadores[i].sprite.scale.x = 1;
+            }
             // 1- seteo a falso pelota_cabeza
             this.equipo_jugador.jugadores[i].pelota_enlacabeza = false;
             if (this.equipo_jugador.jugadores[i].saltando){
@@ -251,22 +259,22 @@ DudeFootball.Play.prototype = {
     },
 
     cambia_activo: function(){
-	if (this.jugador_activo.controlando){
+	    if (this.jugador_activo.controlando){
             return;
         }
         //Para todos los compis comprueba las distancias a la pelota y saco la menor
         var aux = Number.MAX_VALUE;
-	var min;
+	    var min;
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) { 
-            if (this.equipo_jugador.jugadores[i].check_distancia(this.pelota.sprite.body.position) < aux){
-		aux = this.equipo_jugador.jugadores[i].check_distancia(this.pelota.sprite.body.position);
+            if (this.equipo_jugador.jugadores[i].check_distancia(this.pelota.sprite.body.position) < aux && this.equipo_jugador.jugadores[i].aturdido_time <= this.time.now){
+		        aux = this.equipo_jugador.jugadores[i].check_distancia(this.pelota.sprite.body.position);
                 min = i;
             }
         }
         // Si el activo está mucho mas lejos que otro, cambio
-	var d_min = this.equipo_jugador.jugadores[min].check_distancia(this.pelota.sprite.body.position);
+	    var d_min = this.equipo_jugador.jugadores[min].check_distancia(this.pelota.sprite.body.position);
         var d_activo = this.jugador_activo.check_distancia(this.pelota.sprite.body.position);
-	if ((d_activo - d_min) > this.distancia_cambio_activo){
+	    if ((d_activo - d_min) > this.distancia_cambio_activo || this.jugador_activo.aturdido_time > this.time.now){
             this.jugador_activo = this.equipo_jugador.jugadores[min];
         }
     },
@@ -276,9 +284,10 @@ DudeFootball.Play.prototype = {
         //
         // Reseteo los que van a por la pelota, en cada buvle podran ir los que se permitan como máximo
         this.equipo_jugador.cuantos_a_por_pelota = 0;
+        var jugadores_cerca = [];
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) { 
             //Si no es el jugador activo
-            if (this.equipo_jugador.jugadores[i] !== this.jugador_activo){
+            if (this.equipo_jugador.jugadores[i] !== this.jugador_activo && !this.equipo_jugador.jugadores[i].saltando){
                 // Si estoy cerca de la pelota
                 // Y el jugador activo no tiene la pelota
                 // Y no estoy aturdido ... voy a por la pelota
@@ -287,16 +296,26 @@ DudeFootball.Play.prototype = {
                     && (this.equipo_jugador.jugadores[i].aturdido_time < this.time.now) 
                     && this.equipo_jugador.cuantos_a_por_pelota < this.game.max_a_por_pelota){
                     //TODO: Solo uno o dos a por la pelota
+                    jugadores_cerca.push(i);
                     this.game.physics.arcade.moveToObject(this.equipo_jugador.jugadores[i].sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
                     this.equipo_jugador.cuantos_a_por_pelota++;
                 }
                 else{
                     if (this.equipo_jugador.jugadores[i].aturdido_time < this.time.now){
+
+                        var ajusta_carca_area = 1.2;
+                        if (this.equipo_jugador.jugadores[i].sprite.x < 500){
+                            ajusta_carca_area = 1.5;
+                        }
+                        if (this.equipo_jugador.jugadores[i].sprite.x > this.game.ancho_campo - 500){
+                            ajusta_carca_area = 1.5;
+                        }
+
                         // Si no estoy aturdido
                         // Calculo donde moverme
                         // TODO: crear un metodo especifico que calcule esto 
-                        var aleatorio = (this.equipo_jugador.jugadores[i].posicion_inicial.x*this.amplitud_equipo + this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x) + (Math.floor(Math.random() * 300) - 150);
-                        var aleatorio2 = this.equipo_jugador.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y) + (Math.floor(Math.random() * 300) - 150);
+                        var aleatorio = (this.equipo_jugador.jugadores[i].posicion_inicial.x*this.amplitud_equipo + this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+                        var aleatorio2 = this.equipo_jugador.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 400) - 200);
                         if (this.game.time.now > this.equipo_jugador.jugadores[i].cambio_aleatorio_time){
                             this.equipo_jugador.jugadores[i].x_aleatorea = aleatorio;
                             this.equipo_jugador.jugadores[i].y_aleatorea = aleatorio2;
@@ -304,24 +323,20 @@ DudeFootball.Play.prototype = {
                         }
                         //Y me muevo a ese punto
                         //TODO: revisar el fin del movimiento que va chungo
-                        this.game.physics.arcade.moveToXY(this.equipo_jugador.jugadores[i].sprite, this.equipo_jugador.jugadores[i].x_aleatorea, this.equipo_jugador.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
-                    }
-                    /*
-                    else{
                         var donde_ir = new Phaser.Point(this.equipo_jugador.jugadores[i].x_aleatorea, this.equipo_jugador.jugadores[i].y_aleatorea);
-                        if (this.equipo_jugador.jugadores[i].check_distancia(donde_ir) < 10 ){
-                            var aleatorio = (this.equipo_jugador.jugadores[i].posicion_inicial.x*this.amplitud_equipo + this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x) + (Math.floor(Math.random() * 300) - 150);
-                            var aleatorio2 = this.equipo_jugador.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y) + (Math.floor(Math.random() * 300) - 150);
+                        if (this.equipo_jugador.jugadores[i].check_distancia(donde_ir) < 70 ){
+                            var aleatorio = (this.equipo_jugador.jugadores[i].posicion_inicial.x*this.amplitud_equipo + this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+                            var aleatorio2 = this.equipo_jugador.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 400) - 200);
                             if (this.game.time.now > this.equipo_jugador.jugadores[i].cambio_aleatorio_time){
                                 this.equipo_jugador.jugadores[i].x_aleatorea = aleatorio;
                                 this.equipo_jugador.jugadores[i].y_aleatorea = aleatorio2;
                                 this.equipo_jugador.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
                             }
-                            
+                        }
+                        else{
                             this.game.physics.arcade.moveToXY(this.equipo_jugador.jugadores[i].sprite, this.equipo_jugador.jugadores[i].x_aleatorea, this.equipo_jugador.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
                         }
                     }
-                    */
                 }
             } 
         } 
@@ -332,42 +347,50 @@ DudeFootball.Play.prototype = {
         // Analogo al anterior
         this.equipo_CPU.cuantos_a_por_pelota = 0;
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
-            if (this.equipo_CPU.jugadores[i].estoy_cerca(this.pelota.sprite.body.position) 
-                && !this.jugador_rival_activo.controlando 
-                && (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now)
-                && this.equipo_CPU.cuantos_a_por_pelota < this.game.max_a_por_pelota){
+            if (!this.equipo_jugador.jugadores[i].saltando){
+                if (this.equipo_CPU.jugadores[i].estoy_cerca(this.pelota.sprite.body.position) 
+                    && !this.jugador_rival_activo.controlando 
+                    && (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now)
+                    && this.equipo_CPU.cuantos_a_por_pelota < this.game.max_a_por_pelota){
 
-                this.game.physics.arcade.moveToObject(this.equipo_CPU.jugadores[i].sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
-                this.equipo_CPU.cuantos_a_por_pelota++;
-            }
-            else{
-                if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
-                    var aleatorio = (this.equipo_CPU.jugadores[i].posicion_inicial.x/this.amplitud_equipo - this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x) + (Math.floor(Math.random() * 300) - 150);
-                    var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y) + (Math.floor(Math.random() * 300) - 150);
-                    if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
-                        this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
-                        this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
-                        this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
-                    }
-                    
-                    this.game.physics.arcade.moveToXY(this.equipo_CPU.jugadores[i].sprite, this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
+                    this.game.physics.arcade.moveToObject(this.equipo_CPU.jugadores[i].sprite, this.pelota.sprite.body, this.game.velocidad_jugador, 0);
+                    this.equipo_CPU.cuantos_a_por_pelota++;
                 }
-                /*
                 else{
-                    var donde_ir = new Phaser.Point(this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea);
-                    if (this.equipo_CPU.jugadores[i].check_distancia(donde_ir) < 10 ){
-                        var aleatorio = (this.equipo_CPU.jugadores[i].posicion_inicial.x/this.amplitud_equipo - this.factor_ataque) + (this.pelota.sprite.x - this.game.inicio_pelota_x) + (Math.floor(Math.random() * 300) - 150);
-                        var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y) + (Math.floor(Math.random() * 300) - 150);
+                    if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
+
+                        var ajusta_carca_area = 1.2;
+                        if (this.equipo_jugador.jugadores[i].sprite.x < 500){
+                            ajusta_carca_area = 1.5;
+                        }
+                        if (this.equipo_jugador.jugadores[i].sprite.x > this.game.ancho_campo - 500){
+                            ajusta_carca_area = 1.5;
+                        }
+
+                        var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
+                                        + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+                        var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
                         if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
                             this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
                             this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
                             this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
                         }
-                        
-                        this.game.physics.arcade.moveToXY(this.equipo_CPU.jugadores[i].sprite, this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
+                        var donde_ir = new Phaser.Point(this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea);
+                        if (this.equipo_CPU.jugadores[i].check_distancia(donde_ir) < 70 ){
+                            var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
+                                        + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+                            var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
+                            if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
+                                this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
+                                this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
+                                this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
+                            }
+                        }
+                        else{
+                            this.game.physics.arcade.moveToXY(this.equipo_CPU.jugadores[i].sprite, this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
+                        }
                     }
                 }
-                */
             }
         } 
     },
@@ -405,17 +428,21 @@ DudeFootball.Play.prototype = {
         if (Math.abs(this.pelota.sprite.body.velocity.x) > this.velocidad_aturdir ||
             Math.abs(this.pelota.sprite.body.velocity.y) > this.velocidad_aturdir ){
             this.equipo_jugador.jugadores[id].aturdir();
+            this.pelota.sprite.body.velocity.set(0,0);
         }
-        //Seteo controlando
-        this.jugador_activo = this.equipo_jugador.jugadores[id];
-        this.jugador_activo.controlando = true;
-        this.jugador_rival_activo.controlando = false;
+        else{
+            //Seteo controlando
+            this.jugador_activo = this.equipo_jugador.jugadores[id];
+            this.jugador_activo.controlando = true;
+            this.jugador_rival_activo.controlando = false;
+        }
     },
 
     controla_rival: function(id){
         if (Math.abs(this.pelota.sprite.body.velocity.x) > this.velocidad_aturdir ||
             Math.abs(this.pelota.sprite.body.velocity.y) > this.velocidad_aturdir ){
             this.equipo_CPU.jugadores[id].aturdir();
+            this.pelota.sprite.body.velocity.set(0,0);
         }
         //Seteo controlando
         this.jugador_rival_activo = this.equipo_CPU.jugadores[id];
@@ -637,7 +664,7 @@ DudeFootball.Play.prototype = {
 
         //Se vuelve a activar la colisión con el jugador
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) {
-            if (this.time.now > this.equipo_jugador.jugadores[i].chute_time && !this.equipo_jugador.jugadores[i].saltando){
+            if (this.time.now > this.equipo_jugador.jugadores[i].chute_time && !this.equipo_jugador.jugadores[i].saltando && !this.jugador_activo.controlando){
                 if (this.equipo_jugador.jugadores[i].aturdido_time < this.time.now){
                     this.physics.arcade.collide(this.pelota.sprite, this.equipo_jugador.jugadores[i].fake_sprite, function(){this.controla(i);} , null, this);  
                 }
@@ -915,7 +942,7 @@ DudeFootball.Play.prototype = {
 
     procesa_saltando: function(i){
         //Basícamente se comprueba que el jugador a caido al suelo, cuando esto ocurre se llama a la funcion que procesa el fin del salto
-        this.physics.arcade.collide(this.jugador_activo.sprite, this.equipo_jugador.jugadores[i].suelo_saltando_fake, this.equipo_jugador.jugadores[i].fin_salto.bind(this.equipo_jugador.jugadores[i]), null, this); 
+        this.physics.arcade.collide(this.equipo_jugador.jugadores[i].sprite, this.equipo_jugador.jugadores[i].suelo_saltando_fake, this.equipo_jugador.jugadores[i].fin_salto.bind(this.equipo_jugador.jugadores[i]), null, this); 
     },
 
 

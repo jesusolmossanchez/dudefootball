@@ -12,7 +12,7 @@ function Player(juego, x, y, cpu){
 
 
     //Añado la imagen
-    this.fake_sprite = juego.add.sprite(x, y + 70, 'fake_sprite_jugador');
+    this.fake_sprite = juego.add.sprite(x, y + 70, 'fake_sprite');
     this.marca_activo = juego.add.sprite(x+35, y-25, 'jugador_activo');
     this.sombra = juego.add.sprite(x, y+35, 'sombra_jugador');
     this.sprite.anchor.setTo(0.5, 0.5);
@@ -67,7 +67,7 @@ function Player(juego, x, y, cpu){
 
     this.ajusta_fake = function(){
         this.fake_sprite.body.position.x = this.sprite.body.position.x + 5;
-        this.fake_sprite.body.position.y = this.sprite.body.position.y + 70;
+        this.fake_sprite.body.position.y = this.sprite.body.position.y + 60;
         this.marca_activo.position.x = this.sprite.body.position.x + 35;
         this.marca_activo.position.y = this.sprite.body.position.y - 25;
         this.marca_activo.alpha = 0;
@@ -137,7 +137,7 @@ function Player(juego, x, y, cpu){
         //this.sprite.animations.play('salta');
         
         //Pongo el suelo del jugador en su sitio
-        this.suelo_saltando_fake.body.position.y = this.sprite.body.position.y + 75;
+        this.suelo_saltando_fake.body.position.y = this.sprite.body.position.y + 85;
         
         //Velocidad de salto
         this.sprite.body.velocity.y = -juego.velocidad_salto;
@@ -240,7 +240,9 @@ function Player(juego, x, y, cpu){
     this.aturdir = function(posicion) {
         console.log("me quedo loco!");
         this.sprite.animations.play('aturdido');
+        this.controlando = false;
         this.aturdido_time = juego.time.now + juego.tiempo_aturdido;
+
     }
 
 }
