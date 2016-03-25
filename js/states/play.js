@@ -747,6 +747,68 @@ DudeFootball.Play.prototype = {
         }
     },
 
+    chuta_portero: function(super_potencia){
+
+        //velocidad del disparo según superpotencia
+        //TODO: Animación del disparo también!
+        var potencia_disparo = 500;
+
+
+        //diferentes angulos del disparo
+        ////
+        //DIRECCIONES!
+        //
+        // 7 8 9
+        // 4 5 6
+        // 1 2 3
+        //
+        //
+        if(this.arriba.isDown && !this.abajo.isDown && !this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 8;
+            this.pelota.sprite.body.velocity.y = -potencia_disparo;
+            this.pelota.sprite.body.velocity.x = 0;
+        }
+        if(!this.arriba.isDown && this.abajo.isDown && !this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 2;
+            this.pelota.sprite.body.velocity.y = potencia_disparo;
+            this.pelota.sprite.body.velocity.x = 0;
+        }
+        if(!this.arriba.isDown && !this.abajo.isDown && !this.izquierda.isDown && this.derecha.isDown){
+            //donde = 6;
+            this.pelota.sprite.body.velocity.y = 0;
+            this.pelota.sprite.body.velocity.x = potencia_disparo;
+        }
+        if(!this.arriba.isDown && !this.abajo.isDown && this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 4;
+            this.pelota.sprite.body.velocity.y = 0;
+            this.pelota.sprite.body.velocity.x = -potencia_disparo;
+        }
+        if(this.arriba.isDown && !this.abajo.isDown && this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 7;
+            this.pelota.sprite.body.velocity.y = -potencia_disparo;
+            this.pelota.sprite.body.velocity.x = -potencia_disparo;
+        }
+        if(this.arriba.isDown && !this.abajo.isDown && !this.izquierda.isDown && this.derecha.isDown){
+            //donde = 9;
+            this.pelota.sprite.body.velocity.y = -potencia_disparo;
+            this.pelota.sprite.body.velocity.x = potencia_disparo;
+        }
+        if(!this.arriba.isDown && this.abajo.isDown && !this.izquierda.isDown && this.derecha.isDown){
+            //donde = 3;
+            this.pelota.sprite.body.velocity.y = potencia_disparo;
+            this.pelota.sprite.body.velocity.x = potencia_disparo;
+        }
+        if(!this.arriba.isDown && this.abajo.isDown && this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 1;
+            this.pelota.sprite.body.velocity.y = potencia_disparo;
+            this.pelota.sprite.body.velocity.x = -potencia_disparo;
+        }
+        if(!this.arriba.isDown && !this.abajo.isDown && !this.izquierda.isDown && !this.derecha.isDown){
+            //donde = 5;
+            this.pelota.sprite.body.velocity.y = 0;
+            this.pelota.sprite.body.velocity.x = potencia_disparo;
+        }
+    },
     chuta: function(super_potencia){
 
         //velocidad del disparo según superpotencia
@@ -1068,6 +1130,18 @@ DudeFootball.Play.prototype = {
         }
 
         this.jugador_activo.controlando = false;
+
+        if(this.disparo.isUp){
+            //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
+            if(this.pulsacion_chuta_portero){
+                console.log("chutaportero")
+                this.chuta_portero();
+                //reseteo la pulsacion
+                this.portero_controla = false;  
+                this.pulsacion_chuta_portero = false;
+            }
+        }
+
         //Si se suelta el centro y el jugador controla la pelota
         if(this.centro.isUp){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
@@ -1082,6 +1156,9 @@ DudeFootball.Play.prototype = {
 
         if (this.centro.isDown){
             this.pulsacion_centro_portero = true;
+        }
+        if (this.disparo.isDown){
+            this.pulsacion_chuta_portero = true;
         }
     },
 
