@@ -80,9 +80,12 @@ DudeFootball.Play.prototype = {
         //Jugadores máximos permitidos que vayan a por la pelota
         this.game.max_a_por_pelota = 1;
 
+
+        this.portero_controla = false;
+
         //FIN CONSTANTES
 
-        this.add.sprite(0, 0, 'background');
+        this.background = this.add.sprite(0, 0, 'background');
         this.game.world.setBounds(0, 0, this.game.ancho_campo, this.game.alto_campo);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -103,6 +106,8 @@ DudeFootball.Play.prototype = {
         
         this.jugador_rival_activo = this.equipo_CPU.jugadores[0];
 
+        this.equipo_CPU.portero = new Portero(this.game, this.game.ancho_campo-50, this.game.alto_campo/2, true);
+
 
         //EQUIPO JUGADOR
         this.equipo_jugador = new Equipo(this.game, true);
@@ -116,6 +121,7 @@ DudeFootball.Play.prototype = {
 
         this.jugador_activo = this.equipo_jugador.jugadores[0];
 
+        this.equipo_jugador.portero = new Portero(this.game, 50, this.game.alto_campo/2, false);
 
         
 
@@ -155,6 +161,10 @@ DudeFootball.Play.prototype = {
 
     },
     update: function() {
+
+
+        this.equipo_jugador.portero.resetea_velocidad();
+        this.equipo_CPU.portero.resetea_velocidad();
 
         //Pinta el minimapa
         this.pinta_minimapa();
@@ -199,6 +209,12 @@ DudeFootball.Play.prototype = {
         }       
 
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) {
+            if (this.equipo_CPU.jugadores[i].sprite.body.velocity.x < 0){
+                this.equipo_CPU.jugadores[i].sprite.scale.x = 1;
+            }
+            else{
+                this.equipo_CPU.jugadores[i].sprite.scale.x = -1;
+            }
             this.equipo_CPU.jugadores[i].pelota_enlacabeza = false;
             if (this.equipo_CPU.jugadores[i].saltando){
                 this.procesa_saltando(i);
@@ -227,26 +243,45 @@ DudeFootball.Play.prototype = {
         //Proceso las entradas por teclado (tambien deberia controlar con el joystick cuando este)
         this.procesa_inputs();
 
-
-        if(this.jugador_activo.controlando){
-            //Lógica cuando el jugador activo tiene la pelota
-            this.procesa_controlando();
+        if (this.portero_controla){
+            this.equipo_jugador.volver_inicio();
+            this.equipo_CPU.volver_inicio();
+            this.pelota.sprite.position.x = this.equipo_jugador.portero.sprite.position.x + 5;
+            this.pelota.sprite.position.y = this.equipo_jugador.portero.sprite.position.y + 5;
+            this.procesa_controlando_portero();
         }
         else{
-            //Lógica cuando jugador activo NO tiene la pelota
-            this.procesa_no_controlando();
+            if(this.jugador_activo.controlando){
+                //Lógica cuando el jugador activo tiene la pelota
+                this.procesa_controlando();
+            }
+            else{
+                //Lógica cuando jugador activo NO tiene la pelota
+                this.procesa_no_controlando();
+            }
         }
-
-        if(this.jugador_rival_activo.controlando){
-            //Lógica cuando el jugador activo tiene la pelota
-            this.procesa_controlando_rival();
+        
+        if(this.portero_controla_rival){
+            this.equipo_jugador.volver_inicio();
+            this.equipo_CPU.volver_inicio();
+            this.pelota.sprite.position.x = this.equipo_CPU.portero.sprite.position.x + 5;
+            this.pelota.sprite.position.y = this.equipo_CPU.portero.sprite.position.y + 5;
+            this.procesa_controlando_portero_rival();
         }
         else{
-            //Lógica cuando jugador activo NO tiene la pelota
-            this.procesa_no_controlando_rival();
+            if(this.jugador_rival_activo.controlando){
+                //Lógica cuando el jugador activo tiene la pelota
+                this.procesa_controlando_rival();
+            }
+            else{
+                //Lógica cuando jugador activo NO tiene la pelota
+                this.procesa_no_controlando_rival();
+            }
         }
 
         
+
+
         this.procesa_potencia();
 
         this.cambia_activo();
@@ -280,6 +315,11 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_compis: function(){
+
+        if (this.portero_controla || this.portero_controla_rival){
+            return;
+        }
+
         //Para todos los compis
         //
         // Reseteo los que van a por la pelota, en cada buvle podran ir los que se permitan como máximo
@@ -344,6 +384,9 @@ DudeFootball.Play.prototype = {
 
 
     procesa_rivales: function(){
+        if (this.portero_controla || this.portero_controla_rival){
+            return;
+        }
         // Analogo al anterior
         this.equipo_CPU.cuantos_a_por_pelota = 0;
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
@@ -528,6 +571,8 @@ DudeFootball.Play.prototype = {
             this.pelota.sprite.body.velocity.x = this.jugador_activo.sprite.body.velocity.x;
         }
 
+        
+
         //Resitua pelota con respecto al jugador
         //TODO: revisar esto!!
         if(this.jugador_activo.sprite.body.velocity.x > 0 && !this.jugador_activo.pelota_derecha){
@@ -583,22 +628,39 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_inputs: function(){
-        
-        if (this.time.now > this.jugador_activo.lanzado_time){
+        if (this.portero_controla){
             //Mueve al jugador
             if(this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
-                this.jugador_activo.mueve("izquierda");
+                this.equipo_jugador.portero.mueve("izquierda");
             }
             if(this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
-                this.jugador_activo.mueve("derecha");
+                this.equipo_jugador.portero.mueve("derecha");
             }
             if(this.game.input.keyboard.isDown(Phaser.Keyboard.UP)){
-                this.jugador_activo.mueve("arriba");
+                this.equipo_jugador.portero.mueve("arriba");
             }
             if(this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
-                this.jugador_activo.mueve("abajo");
+                this.equipo_jugador.portero.mueve("abajo");
             }
         }
+        else{
+            if (this.time.now > this.jugador_activo.lanzado_time){
+                //Mueve al jugador
+                if(this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
+                    this.jugador_activo.mueve("izquierda");
+                }
+                if(this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+                    this.jugador_activo.mueve("derecha");
+                }
+                if(this.game.input.keyboard.isDown(Phaser.Keyboard.UP)){
+                    this.jugador_activo.mueve("arriba");
+                }
+                if(this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
+                    this.jugador_activo.mueve("abajo");
+                }
+            }
+        }
+        
 
  
 
@@ -618,6 +680,7 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_centrando: function(){
+        this.game.world.bringToTop(this.pelota.sprite);
         this.pelota.sombra.position.x = this.pelota.sprite.position.x;
         this.pelota.sombra.position.y = this.centra_y+45;
 
@@ -641,7 +704,8 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_no_centrando: function(){
-
+        this.game.world.sendToBack(this.pelota.sprite);
+        this.game.world.sendToBack(this.background);
         this.pelota.sombra.position.x = this.pelota.sprite.position.x;
         this.pelota.sombra.position.y = this.pelota.sprite.position.y + 15;
 
@@ -661,6 +725,9 @@ DudeFootball.Play.prototype = {
             //y se marca como que ya no está centrando
             this.centrando = false;
         }
+
+        this.physics.arcade.collide(this.pelota.sprite, this.equipo_jugador.portero.sprite, this.controla_portero , null, this);
+        this.physics.arcade.collide(this.pelota.sprite, this.equipo_CPU.portero.sprite, this.controla_portero_rival , null, this);
 
         //Se vuelve a activar la colisión con el jugador
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) {
@@ -843,8 +910,37 @@ DudeFootball.Play.prototype = {
         
     },
 
-    centra: function(){
+    centra_portero: function(rival){
+        var is_rival = 1;
+        if (rival){
+            is_rival = -1;
+        }
+        //Seteo que se está centrando
+        this.centrando = true;
+        this.centrando_time = this.time.now + this.tiempo_centrando*1.5;
+        //guardo en el sitio desde el que se centra
+        this.centra_y = this.pelota.sprite.body.position.y;
+        //cambio la velocidad y de la pelota
+        this.pelota.sprite.body.velocity.y = - this.velocidad_centro_y*1.7;
         
+        this.pelota.sprite.body.velocity.x = is_rival * this.velocidad_centro_x*1.4;
+        
+
+        //cambio la gravedad del rebote
+        this.pelota.sprite.body.gravity.y = this.gravedad_pelota_centrando;
+        //pongo el suelo donde se centró, más una compensación
+        this.suelo_fake.body.position.y = this.pelota.sprite.body.position.y + this.compensacion_suelo_fake;
+        //cambio la potencia del rebote (para que rebote menos)
+        this.pelota.sprite.body.bounce.y = this.pelota_bounce_y_centrando;
+        //aumento la pelota
+        //TODO: animación?
+        this.pelota.sprite.scale.setTo(1.3, 1.3);
+
+        //Hago que no rebote en las paredes
+        this.pelota.sprite.body.collideWorldBounds = false;
+    },
+
+    centra: function(){
         //DE Momento solo centro palante y patrás
         this.jugador_activo.chute_time = this.time.now + this.tiempo_chutando;
 
@@ -947,12 +1043,62 @@ DudeFootball.Play.prototype = {
 
 
     cabezazo: function(i){
-        this.equipo_jugador.jugadores[i].pelota_enlacabeza = true;;
+        this.equipo_jugador.jugadores[i].pelota_enlacabeza = true;
     },
 
 
     cabezazo_rival: function(i){
-        this.equipo_CPU.jugadores[i].pelota_enlacabeza = true;;
+        this.equipo_CPU.jugadores[i].pelota_enlacabeza = true;
+    },
+
+
+    controla_portero: function(){
+        this.tiempo_portero_max = this.time.now + 3000;
+        this.portero_controla = true;
+        this.equipo_jugador.volver_inicio();
+        this.equipo_CPU.volver_inicio();
+        this.equipo_jugador.portero.sprite.body.velocity.setTo(0,0);
+        this.pelota.sprite.body.velocity.setTo(0,0);
+    },
+
+    procesa_controlando_portero: function(){
+        if (this.tiempo_portero_max < this.time.now){
+            this.portero_controla = false;
+            this.centra_portero();
+        }
+
+        this.jugador_activo.controlando = false;
+        //Si se suelta el centro y el jugador controla la pelota
+        if(this.centro.isUp){
+            //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
+            if(this.pulsacion_centro_portero){
+                //centra
+                this.portero_controla = false;
+                this.centra_portero();
+                //reseteo la pulsacion
+                this.pulsacion_centro_portero = false;
+            }
+        }
+
+        if (this.centro.isDown){
+            this.pulsacion_centro_portero = true;
+        }
+    },
+
+    controla_portero_rival: function(){
+        this.tiempo_portero_max = this.time.now + Math.random()*3000;
+        this.portero_controla_rival = true;
+        this.equipo_jugador.volver_inicio();
+        this.equipo_CPU.volver_inicio();
+        this.equipo_CPU.portero.sprite.body.velocity.setTo(0,0);
+        this.pelota.sprite.body.velocity.setTo(0,0);
+    },
+
+    procesa_controlando_portero_rival: function(){
+        if (this.tiempo_portero_max < this.time.now){
+            this.portero_controla_rival = false;
+            this.centra_portero(true);
+        }
     }
 };
 
