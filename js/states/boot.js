@@ -18,5 +18,9 @@ DudeFootball.Boot.prototype = {
 	create: function() {
 		this.game.input.maxPointers = 1;
 		this.game.state.start('Preload');
+		this.game.input.addPointer();
+		this.game.input.addPointer();
+		this.game.input.addPointer();
+		this.game.input.addPointer();
 	}
 };
