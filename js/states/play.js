@@ -1300,6 +1300,16 @@ DudeFootball.Play.prototype = {
             this.portero_controla_rival = false;
             this.centra_portero(true);
         }
+    },
+
+    function render() {
+
+        //  Just renders out the pointer data when you touch the canvas
+        this.game.debug.pointer(game.input.pointer1);
+        this.game.debug.pointer(game.input.pointer2);
+        this.game.debug.pointer(game.input.pointer3);
+        this.game.debug.pointer(game.input.pointer4);
+
     }
 };
 
