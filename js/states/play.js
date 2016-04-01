@@ -740,32 +740,32 @@ DudeFootball.Play.prototype = {
 
         if (this.portero_controla){
             //Mueve al jugador
-            if(this.izquierda.isDown || this.mueveizquierda){
+            if(this.mueveizquierda){
                 this.equipo_jugador.portero.mueve("izquierda");
             }
-            if(this.derecha.isDown || this.muevederecha){
+            if(this.muevederecha){
                 this.equipo_jugador.portero.mueve("derecha");
             }
-            if(this.arriba.isDown || this.muevearriba){
+            if(this.muevearriba){
                 this.equipo_jugador.portero.mueve("arriba");
             }
-            if(this.abajo.isDown || this.mueveabajo){
+            if(this.mueveabajo){
                 this.equipo_jugador.portero.mueve("abajo");
             }
         }
         else{
             if (this.time.now > this.jugador_activo.lanzado_time){
                 //Mueve al jugador
-                if(this.izquierda.isDown || this.mueveizquierda){
+                if(this.mueveizquierda){
                     this.jugador_activo.mueve("izquierda");
                 }
-                if(this.derecha.isDown || this.muevederecha){
+                if(this.muevederecha){
                     this.jugador_activo.mueve("derecha");
                 }
-                if(this.arriba.isDown || this.muevearriba){
+                if(this.muevearriba){
                     this.jugador_activo.mueve("arriba");
                 }
-                if(this.abajo.isDown || this.mueveabajo){
+                if(this.mueveabajo){
                     this.jugador_activo.mueve("abajo");
                 }
             }
@@ -873,47 +873,47 @@ DudeFootball.Play.prototype = {
         // 1 2 3
         //
         //
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 8;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = 0;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 2;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = 0;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 6;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 4;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 7;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 9;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 3;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 1;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 5;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
@@ -938,47 +938,47 @@ DudeFootball.Play.prototype = {
         // 1 2 3
         //
         //
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 8;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = 0;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 2;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = 0;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 6;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 4;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 7;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 9;
             this.pelota.sprite.body.velocity.y = -potencia_disparo;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             //donde = 3;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             //donde = 1;
             this.pelota.sprite.body.velocity.y = potencia_disparo;
             this.pelota.sprite.body.velocity.x = -potencia_disparo;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             //donde = 5;
             this.pelota.sprite.body.velocity.y = 0;
             this.pelota.sprite.body.velocity.x = potencia_disparo;
@@ -1030,47 +1030,47 @@ DudeFootball.Play.prototype = {
             // 1 2 3
             //
             //
-            if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
                 //donde = 8;
                 this.pelota.sprite.body.velocity.y = -potencia_disparo;
                 this.pelota.sprite.body.velocity.x = 0;
             }
-            if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
                 //donde = 2;
                 this.pelota.sprite.body.velocity.y = potencia_disparo;
                 this.pelota.sprite.body.velocity.x = 0;
             }
-            if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+            if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
                 //donde = 6;
                 this.pelota.sprite.body.velocity.y = 0;
                 this.pelota.sprite.body.velocity.x = potencia_disparo;
             }
-            if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(!this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
                 //donde = 4;
                 this.pelota.sprite.body.velocity.y = 0;
                 this.pelota.sprite.body.velocity.x = -potencia_disparo;
             }
-            if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
                 //donde = 7;
                 this.pelota.sprite.body.velocity.y = -potencia_disparo;
                 this.pelota.sprite.body.velocity.x = -potencia_disparo;
             }
-            if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+            if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
                 //donde = 9;
                 this.pelota.sprite.body.velocity.y = -potencia_disparo;
                 this.pelota.sprite.body.velocity.x = potencia_disparo;
             }
-            if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+            if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && this.muevederecha){
                 //donde = 3;
                 this.pelota.sprite.body.velocity.y = potencia_disparo;
                 this.pelota.sprite.body.velocity.x = potencia_disparo;
             }
-            if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(!this.muevearriba && this.mueveabajo && this.mueveizquierda && !this.muevederecha){
                 //donde = 1;
                 this.pelota.sprite.body.velocity.y = potencia_disparo;
                 this.pelota.sprite.body.velocity.x = -potencia_disparo;
             }
-            if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+            if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
                 //donde = 5;
                 this.pelota.sprite.body.velocity.y = 0;
                 this.pelota.sprite.body.velocity.x = potencia_disparo;
@@ -1128,7 +1128,7 @@ DudeFootball.Play.prototype = {
 
         //cambio la velocidad y de la pelota
         this.pelota.sprite.body.velocity.y = - this.velocidad_centro_y;
-        if(this.izquierda.isDown || this.mueveizquierda){
+        if(this.mueveizquierda){
             this.pelota.sprite.body.velocity.x = - this.velocidad_centro_x;
         }
         else{
@@ -1162,31 +1162,31 @@ DudeFootball.Play.prototype = {
         //
         //
         var donde;
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             donde = 8;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             donde = 2;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             donde = 6;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             donde = 4;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             donde = 7;
         }
-        if(this.arriba.isDown || this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(this.muevearriba && !this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             donde = 9;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && this.derecha.isDown || this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && !this.mueveizquierda && this.muevederecha){
             donde = 3;
         }
-        if(!this.arriba.isDown || !this.muevearriba && this.abajo.isDown || this.mueveabajo && this.izquierda.isDown || this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && this.mueveabajo && this.mueveizquierda && !this.muevederecha){
             donde = 1;
         }
-        if(!this.arriba.isDown || !this.muevearriba && !this.abajo.isDown || !this.mueveabajo && !this.izquierda.isDown || !this.mueveizquierda && !this.derecha.isDown || !this.muevederecha){
+        if(!this.muevearriba && !this.mueveabajo && !this.mueveizquierda && !this.muevederecha){
             donde = 5;
         }
         
