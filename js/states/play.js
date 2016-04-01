@@ -1302,7 +1302,7 @@ DudeFootball.Play.prototype = {
         }
     },
 
-    function render() {
+    render: function() {
 
         //  Just renders out the pointer data when you touch the canvas
         this.game.debug.pointer(game.input.pointer1);
