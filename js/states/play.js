@@ -1301,7 +1301,7 @@ DudeFootball.Play.prototype = {
             this.centra_portero(true);
         }
     },
-
+    /*
     render: function() {
 
         //  Just renders out the pointer data when you touch the canvas
@@ -1311,5 +1311,6 @@ DudeFootball.Play.prototype = {
         this.game.debug.pointer(this.game.input.pointer4);
 
     }
+    */
 };
 
