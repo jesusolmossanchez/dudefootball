@@ -70,6 +70,22 @@ DudeFootball.Play.prototype = {
         //MOVIL
         if (!this.game.device.desktop){
             this.joy = new Joystick(this.game, 120, this.world.height - 100);
+            //TODO: Pillar el correcto (boton de accion)
+            this.botonA = this.add.sprite(this.world.width - 80, this.world.height - 110, 'botonA');
+            this.botonB = this.add.sprite(this.world.width - 200, this.world.height - 80, 'botonB');
+            
+            this.botonA.anchor.setTo(0.5, 0.5);
+            this.botonA.inputEnabled = true;
+            this.botonA.input.sprite.events.onInputDown.add(this.entra_botonA, this);
+            this.botonA.input.sprite.events.onInputUp.add(this.sal_botonA, this);
+
+            this.botonB.anchor.setTo(0.5, 0.5);
+            this.botonB.inputEnabled = true;
+            this.botonB.input.sprite.events.onInputDown.add(this.entra_botonB, this);
+            this.botonB.input.sprite.events.onInputUp.add(this.sal_botonB, this);
+
+            this.botonA.fixedToCamera = true;
+            this.botonB.fixedToCamera = true;
         }
 
 
@@ -230,6 +246,22 @@ DudeFootball.Play.prototype = {
         this.procesa_rivales();
 
         this.jugador_activo.marca_activo.alpha = 1;
+    },
+
+    entra_botonA: function (){
+        this.pulsacion = true;
+    },
+
+    sal_botonA: function (){
+        this.pulsacion = false;
+    },
+
+    entra_botonB: function (){
+        this.pulsacion_centro = true;
+    },
+
+    sal_botonB: function (){
+        this.pulsacion_centro = false;
     },
 
     procesa_sprites: function(){
