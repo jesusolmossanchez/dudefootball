@@ -212,6 +212,7 @@ DudeFootball.Play.prototype = {
             this.procesa_controlando_portero();
         }
         else{
+            this.procesa_portero();
             if(this.jugador_activo.controlando){
                 //Lógica cuando el jugador activo tiene la pelota
                 this.procesa_controlando();
@@ -226,6 +227,7 @@ DudeFootball.Play.prototype = {
             this.procesa_controlando_portero_rival();
         }
         else{
+            this.procesa_portero_rival();
             if(this.jugador_rival_activo.controlando){
                 //Lógica cuando el jugador activo tiene la pelota
                 this.procesa_controlando_rival();
@@ -242,6 +244,8 @@ DudeFootball.Play.prototype = {
         this.cambia_activo();
 
         this.procesa_compis();
+
+        
 
         this.procesa_rivales();
 
@@ -262,6 +266,18 @@ DudeFootball.Play.prototype = {
 
     sal_botonB: function (){
         this.pulsa_B = false;
+    },
+
+    procesa_portero: function (){
+        if (this.equipo_jugador.portero.estoy_cerca(this.pelota.sprite.body.position)){
+            this.game.physics.arcade.moveToObject(this.equipo_jugador.portero.sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
+        }
+    },
+
+    procesa_portero_rival: function (){
+        if (this.equipo_CPU.portero.estoy_cerca(this.pelota.sprite.body.position)){
+            this.game.physics.arcade.moveToObject(this.equipo_CPU.portero.sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
+        }
     },
 
     procesa_sprites: function(){

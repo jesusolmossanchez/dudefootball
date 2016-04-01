@@ -38,4 +38,14 @@ function Portero(juego, x, y, cpu){
     this.resetea_velocidad = function(adonde) {
         this.sprite.body.velocity.setTo(0,0);
     }
+
+    this.estoy_cerca = function(posicion) {
+        var dist = Math.sqrt( Math.pow((posicion.x-this.sprite.body.position.x), 2) + Math.pow((posicion.y-this.sprite.body.position.y), 2) );      
+        if (dist < 300){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
