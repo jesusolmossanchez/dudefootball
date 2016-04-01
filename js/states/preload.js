@@ -26,6 +26,9 @@ DudeFootball.Preload.prototype = {
         this.load.image('fake_sprite', 'assets/fake_sprite.png');
         this.load.image('sombra_jugador', 'assets/sombra_jugador.png');
 
+        this.load.image('joy_back', 'assets/joy_back.png');
+        this.load.image('joy_front', 'assets/joy_front.png');
+
         this.load.image('cargador1', 'assets/cargador.png');
 
     },

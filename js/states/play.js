@@ -67,6 +67,13 @@ DudeFootball.Play.prototype = {
 
 
 
+        //MOVIL
+        if (!this.game.device.desktop){
+            this.joy = new Joystick(this.game, 120, this.world.height - 100);
+        }
+
+
+
 
         //Este valor es la amplitud con la se despliega el equipo en el campo [valores de 0.5 a 2]
         this.amplitud_equipo = 1.8;
@@ -620,35 +627,113 @@ DudeFootball.Play.prototype = {
         
     },
 
+    paraDragg: function (pointer) {
+
+        this.mueveizquierda = false;
+        this.muevederecha = false;
+        this.muevearriba = false;
+        this.mueveabajo = false;
+
+    },
+
+    procesaDragg: function (a, distance, radianes) {
+
+        var angulo = radianes*180/Math.PI;
+
+        if (distance < 30){
+            this.mueveizquierda = false;
+            this.muevederecha = false;
+            this.muevearriba = false;
+            this.mueveabajo = false;
+            return;
+        }
+
+        if (angulo > -90 && angulo < 90){
+            this.mueveizquierda = false;
+            this.muevederecha = true;
+            if (angulo > -150 && angulo < -50){
+                this.muevearriba = true;
+            }
+            else{
+                this.muevearriba = false;
+            }
+            if (angulo < 150 && angulo > 50){
+                this.mueveabajo = true;
+            }
+            else{
+                this.mueveabajo = false;
+            }
+        }
+        if (angulo > 90 || angulo < -90){
+            this.mueveizquierda = true;
+            this.muevederecha = false;
+            if (angulo > -150 && angulo < -50){
+                this.muevearriba = true;
+            }
+            else{
+                this.muevearriba = false;
+            }
+            if (angulo < 150 && angulo > 50){
+                this.mueveabajo = true;
+            }
+            else{
+                this.mueveabajo = false;
+            }
+        }
+        
+        if (angulo > -130 && angulo < -70){
+            this.muevearriba = true;
+            this.mueveizquierda = false;
+            this.muevederecha = false;
+        }
+        
+        if (angulo < 125 && angulo > 65){
+            this.mueveabajo = true;
+            this.mueveizquierda = false;
+            this.muevederecha = false;
+        }
+
+
+    },
+
     procesa_inputs: function(){
+
+        if (!this.game.device.desktop){
+            this.joy.update();
+            this.joy.holder.events.onMove.add(this.procesaDragg, this);
+            this.joy.holder.events.onUp.add(this.paraDragg, this);
+        }
+        
+
+
         if (this.portero_controla){
             //Mueve al jugador
-            if(this.izquierda.isDown){
+            if(this.izquierda.isDown || this.mueveizquierda){
                 this.equipo_jugador.portero.mueve("izquierda");
             }
-            if(this.derecha.isDown){
+            if(this.derecha.isDown || this.muevederecha){
                 this.equipo_jugador.portero.mueve("derecha");
             }
-            if(this.arriba.isDown){
+            if(this.arriba.isDown || this.muevearriba){
                 this.equipo_jugador.portero.mueve("arriba");
             }
-            if(this.abajo.isDown){
+            if(this.abajo.isDown || this.mueveabajo){
                 this.equipo_jugador.portero.mueve("abajo");
             }
         }
         else{
             if (this.time.now > this.jugador_activo.lanzado_time){
                 //Mueve al jugador
-                if(this.izquierda.isDown){
+                if(this.izquierda.isDown || this.mueveizquierda){
                     this.jugador_activo.mueve("izquierda");
                 }
-                if(this.derecha.isDown){
+                if(this.derecha.isDown || this.muevederecha){
                     this.jugador_activo.mueve("derecha");
                 }
-                if(this.arriba.isDown){
+                if(this.arriba.isDown || this.muevearriba){
                     this.jugador_activo.mueve("arriba");
                 }
-                if(this.abajo.isDown){
+                if(this.abajo.isDown || this.mueveabajo){
                     this.jugador_activo.mueve("abajo");
                 }
             }

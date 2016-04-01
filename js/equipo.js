@@ -11,11 +11,12 @@ function Equipo(juego, cpu){
         // TODO: Hacer las distancias relativas al campo
     	if (this.is_CPU){
         	this.jugadores.push(new Player(juego, 2100, 250, true));
+            /*
 	        this.jugadores.push(new Player(juego, 2100, 750, true));
 	        this.jugadores.push(new Player(juego, 1800, 250, true));
 	        this.jugadores.push(new Player(juego, 1800, 750, true));
 	        this.jugadores.push(new Player(juego, 1500, 250, true));
-	        this.jugadores.push(new Player(juego, 1500, 750, true));
+	        this.jugadores.push(new Player(juego, 1500, 750, true));*/
     	}
     	else{
     		this.jugadores.push(new Player(juego, 300, 250));
