@@ -10,9 +10,6 @@ function Portero(juego, x, y, cpu){
         this.is_cpu = false;
     }
 
-    this.posicion_inicial.x = x;
-    this.posicion_inicial.y = y;
-
     this.sprite.anchor.setTo(0.5, 0.5);
 
     this.posicion_inicial = new Phaser.Point(x,y);
