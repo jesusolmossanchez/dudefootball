@@ -212,6 +212,7 @@ DudeFootball.Play.prototype = {
             this.procesa_controlando_portero();
         }
         else{
+            this.equipo_jugador.portero.vuelve_posicion_inicial();
             this.procesa_portero();
             if(this.jugador_activo.controlando){
                 //Lógica cuando el jugador activo tiene la pelota
@@ -227,6 +228,7 @@ DudeFootball.Play.prototype = {
             this.procesa_controlando_portero_rival();
         }
         else{
+            this.equipo_CPU.portero.vuelve_posicion_inicial();
             this.procesa_portero_rival();
             if(this.jugador_rival_activo.controlando){
                 //Lógica cuando el jugador activo tiene la pelota

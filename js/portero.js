@@ -10,6 +10,9 @@ function Portero(juego, x, y, cpu){
         this.is_cpu = false;
     }
 
+    this.posicion_inicial.x = x;
+    this.posicion_inicial.y = y;
+
     this.sprite.anchor.setTo(0.5, 0.5);
 
     this.posicion_inicial = new Phaser.Point(x,y);
@@ -46,6 +49,18 @@ function Portero(juego, x, y, cpu){
         }
         else{
             return false;
+        }
+    }
+
+    this.check_distancia = function(posicion) {
+        var dist = Math.sqrt( Math.pow((posicion.x-this.sprite.body.position.x), 2) + Math.pow((posicion.y-this.sprite.body.position.y), 2) );      
+        return dist;
+    }
+
+    this.vuelve_posicion_inicial = function(posicion) {
+        var donde_ir = new Phaser.Point(this.posicion_inicial.x, this.posicion_inicial.y);
+        if (this.check_distancia(donde_ir) > 70 ){
+            juego.physics.arcade.moveToXY(this.sprite, this.posicion_inicial.x, this.posicion_inicial.y, juego.velocidad_jugador/1.5, 0);
         }
     }
 }
