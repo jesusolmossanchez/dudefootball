@@ -1305,10 +1305,10 @@ DudeFootball.Play.prototype = {
     render: function() {
 
         //  Just renders out the pointer data when you touch the canvas
-        this.game.debug.pointer(game.input.pointer1);
-        this.game.debug.pointer(game.input.pointer2);
-        this.game.debug.pointer(game.input.pointer3);
-        this.game.debug.pointer(game.input.pointer4);
+        this.game.debug.pointer(this.game.input.pointer1);
+        this.game.debug.pointer(this.game.input.pointer2);
+        this.game.debug.pointer(this.game.input.pointer3);
+        this.game.debug.pointer(this.game.input.pointer4);
 
     }
 };
