@@ -6,10 +6,7 @@ DudeFootball.Play = function (game) {
 
 DudeFootball.Play.prototype = {
     create: function() {
-        this.game.input.addPointer();
-        this.game.input.addPointer();
-        this.game.input.addPointer();
-        this.game.input.addPointer();
+        this.game.input.maxPointers = 5;
         //CONSTANTES!
         this.game.ancho_campo = 2400;
         this.game.alto_campo = 1000;
