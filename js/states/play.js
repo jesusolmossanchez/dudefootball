@@ -249,19 +249,19 @@ DudeFootball.Play.prototype = {
     },
 
     entra_botonA: function (){
-        this.pulsacion = true;
+        this.pulsa_A = true;
     },
 
     sal_botonA: function (){
-        this.pulsacion = false;
+        this.pulsa_A = false;
     },
 
     entra_botonB: function (){
-        this.pulsacion_centro = true;
+        this.pulsa_B = true;
     },
 
     sal_botonB: function (){
-        this.pulsacion_centro = false;
+        this.pulsa_B = false;
     },
 
     procesa_sprites: function(){
@@ -529,7 +529,7 @@ DudeFootball.Play.prototype = {
     procesa_no_controlando: function(id){
 
         //Si se suelta el disparo y el jugador controla la pelota
-        if(this.disparo.isUp){
+        if(!this.pulsa_A){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion){
                 //Si se llega a la superpotencia se llama al disparo con superpotencia
@@ -545,7 +545,7 @@ DudeFootball.Play.prototype = {
             }
         }
         //Si se suelta el centro y el jugador no controla la pelota
-        if(this.centro.isUp){
+        if(!this.pulsa_B){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion_centro){
                 //SALTA
@@ -557,10 +557,10 @@ DudeFootball.Play.prototype = {
 
 
         //Ajustar las pulsaciones, a lo que realmente pasa
-        if (this.disparo.isDown){
+        if (this.pulsa_A){
             this.pulsacion = true;
         }
-        if (this.centro.isDown){
+        if (this.pulsa_B){
             this.pulsacion_centro = true;
         }
     },
@@ -568,7 +568,7 @@ DudeFootball.Play.prototype = {
     procesa_controlando: function(){
 
         //Si se suelta el disparo y el jugador controla la pelota
-        if(this.disparo.isUp){
+        if(!this.pulsa_A){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion){
                 //Si se llega a la superpotencia se llama al disparo con superpotencia
@@ -579,7 +579,7 @@ DudeFootball.Play.prototype = {
             }
         }
         //Si se suelta el centro y el jugador controla la pelota
-        if(this.centro.isUp){
+        if(!this.pulsa_B){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion_centro){
                 //centra
@@ -590,10 +590,10 @@ DudeFootball.Play.prototype = {
         }
 
         //Ajustar las pulsaciones, a lo que realmente pasa
-        if (this.disparo.isDown){
+        if (this.pulsa_A){
             this.pulsacion = true;
         }
-        if (this.centro.isDown){
+        if (this.pulsa_B){
             this.pulsacion_centro = true;
         }
 
@@ -778,10 +778,10 @@ DudeFootball.Play.prototype = {
 
     procesa_potencia: function(){
         //Potencia y barrita
-        if (this.disparo.isUp){
+        if (!this.pulsa_A){
             this.potencia = 0;
         }
-        if (this.disparo.isDown){
+        if (this.pulsa_A){
             this.potencia += 1;
         }
         var corta = new Phaser.Rectangle(0, 0, this.potencia, 30);
@@ -1249,7 +1249,7 @@ DudeFootball.Play.prototype = {
 
         this.jugador_activo.controlando = false;
 
-        if(this.disparo.isUp){
+        if(!this.pulsa_A){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion_chuta_portero){
                 console.log("chutaportero")
@@ -1261,7 +1261,7 @@ DudeFootball.Play.prototype = {
         }
 
         //Si se suelta el centro y el jugador controla la pelota
-        if(this.centro.isUp){
+        if(!this.pulsa_B){
             //Siempre que se haya soltado(isUp quiere decir que no lo está pulsando, no que lo acabe de soltar)
             if(this.pulsacion_centro_portero){
                 //centra
@@ -1272,10 +1272,10 @@ DudeFootball.Play.prototype = {
             }
         }
 
-        if (this.centro.isDown){
+        if (this.pulsa_B){
             this.pulsacion_centro_portero = true;
         }
-        if (this.disparo.isDown){
+        if (this.pulsa_A){
             this.pulsacion_chuta_portero = true;
         }
     },
