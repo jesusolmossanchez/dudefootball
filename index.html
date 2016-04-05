@@ -24,7 +24,7 @@
 	<script type="text/javascript">
 		//global variables
 		window.onload = function () {
-			var game = new Phaser.Game(900, 600, Phaser.AUTO, 'dude_football');
+			var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'dude_football');
 
 			//añado las 'pantallas'
 			game.state.add('Boot', DudeFootball.Boot);
