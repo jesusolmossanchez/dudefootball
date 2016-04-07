@@ -4,10 +4,12 @@ function Portero(juego, x, y, cpu){
     if(cpu){
         this.sprite = juego.add.sprite (x, y,'portero_cpu');
         this.is_cpu = true;
+        this.area = new Phaser.Rectangle(juego.ancho_campo-100, juego.alto_campo/2-100, 100, 200);
     }
     else{
         this.sprite = juego.add.sprite (x, y,'portero');
         this.is_cpu = false;
+        this.area = new Phaser.Rectangle(0, juego.alto_campo/2-100, 100, 200);
     }
 
     this.sprite.anchor.setTo(0.5, 0.5);
@@ -59,5 +61,9 @@ function Portero(juego, x, y, cpu){
         if (this.check_distancia(donde_ir) > 70 ){
             juego.physics.arcade.moveToXY(this.sprite, this.posicion_inicial.x, this.posicion_inicial.y, juego.velocidad_jugador/1.5, 0);
         }
+    }
+
+    this.dentro_area = function(posicion){
+        return (posicion.x > this.area.left && posicion.x < this.area.right && posicion.y > this.area.top && posicion.y < this.area.bottom);
     }
 }

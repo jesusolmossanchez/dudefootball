@@ -114,6 +114,19 @@ DudeFootball.Play.prototype = {
 
         this.background = this.add.sprite(0, 0, 'background');
         this.game.world.setBounds(0, 0, this.game.ancho_campo, this.game.alto_campo);
+
+        this.borde_superior = this.game.add.sprite(0, 50, "suelo_fake");
+        this.borde_superior.enableBody = true;
+        this.game.physics.arcade.enable(this.borde_superior);
+        this.borde_superior.body.immovable = true;
+        this.borde_superior.alpha = 0;
+
+        this.borde_inferior = this.game.add.sprite(0, this.game.alto_campo-50, "suelo_fake");
+        this.borde_inferior.enableBody = true;
+        this.game.physics.arcade.enable(this.borde_inferior);
+        this.borde_inferior.body.immovable = true;
+        this.borde_inferior.alpha = 0;
+
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.pelota = new Pelota(this.game);
@@ -271,13 +284,13 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_portero: function (){
-        if (this.equipo_jugador.portero.estoy_cerca(this.pelota.sprite.body.position)){
+        if (this.equipo_jugador.portero.estoy_cerca(this.pelota.sprite.body.position) && this.equipo_jugador.portero.dentro_area(this.pelota.sprite.body.position)){
             this.game.physics.arcade.moveToObject(this.equipo_jugador.portero.sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
         }
     },
 
     procesa_portero_rival: function (){
-        if (this.equipo_CPU.portero.estoy_cerca(this.pelota.sprite.body.position)){
+        if (this.equipo_CPU.portero.estoy_cerca(this.pelota.sprite.body.position) && this.equipo_CPU.portero.dentro_area(this.pelota.sprite.body.position)){
             this.game.physics.arcade.moveToObject(this.equipo_CPU.portero.sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
         }
     },
@@ -746,6 +759,10 @@ DudeFootball.Play.prototype = {
 
     },
 
+
+    movientos_teclas: function(){
+    },
+
     procesa_inputs: function(){
 
         if (!this.game.device.desktop){
@@ -753,6 +770,8 @@ DudeFootball.Play.prototype = {
             this.joy.holder.events.onMove.add(this.procesaDragg, this);
             this.joy.holder.events.onUp.add(this.paraDragg, this);
         }
+
+        this.movientos_teclas();
         
 
 
@@ -832,6 +851,7 @@ DudeFootball.Play.prototype = {
     },
 
     procesa_balon_suelo: function(){
+
         this.game.world.sendToBack(this.pelota.sprite);
         this.game.world.sendToBack(this.background);
         this.pelota.sombra.position.x = this.pelota.sprite.position.x;
@@ -854,6 +874,9 @@ DudeFootball.Play.prototype = {
             this.centrando = false;
         }
 
+        this.physics.arcade.collide(this.pelota.sprite, this.borde_superior, function(){console.log("SUPERIOR")} , null, this);
+        this.physics.arcade.collide(this.pelota.sprite, this.borde_inferior, function(){console.log("inferior")} , null, this);
+
         this.physics.arcade.collide(this.pelota.sprite, this.equipo_jugador.portero.sprite, this.controla_portero , null, this);
         this.physics.arcade.collide(this.pelota.sprite, this.equipo_CPU.portero.sprite, this.controla_portero_rival , null, this);
 
@@ -867,7 +890,7 @@ DudeFootball.Play.prototype = {
         }
 
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) {
-            if (this.time.now > this.equipo_CPU.jugadores[i].chute_time && !this.equipo_CPU.jugadores[i].saltando){
+            if (this.time.now > this.equipo_CPU.jugadores[i].chute_time && !this.equipo_CPU.jugadores[i].saltando && !this.jugador_activo.controlando){
                 if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
                     this.physics.arcade.collide(this.pelota.sprite, this.equipo_CPU.jugadores[i].fake_sprite, function(){this.controla_rival(i);} , null, this);  
                 }
