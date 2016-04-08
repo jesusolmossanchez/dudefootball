@@ -127,6 +127,19 @@ DudeFootball.Play.prototype = {
         this.borde_inferior.body.immovable = true;
         this.borde_inferior.alpha = 0;
 
+	//TODO: El suelo fake vertical
+	this.borde_izq = this.game.add.sprite(50, 0, "suelo_fake_vertical");
+        this.borde_izq.enableBody = true;
+        this.game.physics.arcade.enable(this.borde_izq);
+        this.borde_izq.body.immovable = true;
+	//this.borde_izq.alpha = 0;
+
+        this.borde_der = this.game.add.sprite(this.game.ancho_campo-50, 0, "suelo_fake_vertical");
+        this.borde_der.enableBody = true;
+        this.game.physics.arcade.enable(this.borde_der);
+        this.borde_der.body.immovable = true;
+        //this.borde_der.alpha = 0;
+
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.pelota = new Pelota(this.game);
@@ -914,6 +927,9 @@ DudeFootball.Play.prototype = {
         this.physics.arcade.collide(this.pelota.sprite, this.equipo_jugador.portero.sprite, this.controla_portero , null, this);
         this.physics.arcade.collide(this.pelota.sprite, this.equipo_CPU.portero.sprite, this.controla_portero_rival , null, this);
 
+	this.physics.arcade.overlap(this.pelota.sprite, this.borde_izq, this.sale_izquierda , null, this);
+        this.physics.arcade.overlap(this.pelota.sprite, this.borde_der, this.sale_derecha , null, this);
+
         //Se vuelve a activar la colisión con el jugador
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) {
             if (this.time.now > this.equipo_jugador.jugadores[i].chute_time && !this.equipo_jugador.jugadores[i].saltando && !this.jugador_activo.controlando){
@@ -1312,6 +1328,30 @@ DudeFootball.Play.prototype = {
         this.equipo_CPU.jugadores[i].pelota_enlacabeza = true;
     },
 
+    sale_izquierda: function(){
+        console.log(this.pelota.sprite.position.y);
+        //TODO: comprobar si hay gol o fuera
+        //if hay_gol(){
+        //  this.equipo_CPU.gol();
+        //  sacar_de_centro();
+        //}
+        //else{
+        //  saca_portero
+        //}
+    },
+
+
+    sale_derecha: function(){
+        console.log(this.pelota.sprite.position.y);
+        //TODO: comprobar si hay gol o fuera
+        //if hay_gol(){
+        //  this.equipo_jugador.gol();
+        //  sacar_de_centro();
+        //}
+        //else{
+        //  saca_portero
+        //}
+    },
 
     controla_portero: function(){
         this.pelota.superdisparo = false;
