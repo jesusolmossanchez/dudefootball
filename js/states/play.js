@@ -564,10 +564,12 @@ DudeFootball.Play.prototype = {
             this.pelota.sprite.body.velocity.x = this.pelota.sprite.body.velocity.x - (this.pelota.sprite.body.velocity.x/3);
             this.pelota.sprite.body.velocity.y = this.pelota.sprite.body.velocity.y - (this.pelota.sprite.body.velocity.y/3);
         }
-        //Seteo controlando
-        this.jugador_rival_activo = this.equipo_CPU.jugadores[id];
-        this.jugador_rival_activo.controlando = true;
-        this.jugador_activo.controlando = false;
+	else{
+            //Seteo controlando
+            this.jugador_rival_activo = this.equipo_CPU.jugadores[id];
+            this.jugador_rival_activo.controlando = true;
+            this.jugador_activo.controlando = false;
+        } 
     },
 
 
