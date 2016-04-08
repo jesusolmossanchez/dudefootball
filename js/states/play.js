@@ -767,6 +767,10 @@ DudeFootball.Play.prototype = {
     },
 
     movimientos_teclas: function(){
+        this.mueveizquierda = false;
+        this.muevederecha = false;
+        this.muevearriba = false;
+        this.mueveabajo = false;	
         if (this.disparo.isDown){
             this.pulsa_A = true;
         }
