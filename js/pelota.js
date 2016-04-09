@@ -17,6 +17,9 @@ function Pelota(juego){
     this.sprite.anchor.setTo(0.5, 0.5);
     this.sombra.anchor.setTo(0.5, 0.5);
 
+    this.superdisparo = false;
+    this.superdisparo_time = juego.time.now ;
+
     this.frena = function() {
         if(this.sprite.body.velocity.x > 0){
             this.sprite.body.velocity.x -= 2;
@@ -29,6 +32,15 @@ function Pelota(juego){
         }
         if(this.sprite.body.velocity.y < 0){
             this.sprite.body.velocity.y += 2;
+        }
+    }
+
+    this.procesa_supertiro = function() {
+        if (juego.time.now < this.superdisparo_time){
+            this.superdisparo = true;
+        }
+        else{
+            this.superdisparo = false;
         }
     }
 
