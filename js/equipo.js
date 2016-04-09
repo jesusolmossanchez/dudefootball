@@ -37,6 +37,15 @@ function Equipo(juego, cpu){
     }
     this.posiciona_saquecentro = function(){
         if (this.is_CPU){
+            this.jugadores[0].sprite.position.x = 2100;
+            this.jugadores[0].sprite.position.y = 250;
+            this.jugadores[1].sprite.position.x = 2100;
+            this.jugadores[1].sprite.position.y = 750;
+            this.jugadores[2].sprite.position.x = 1800;
+            this.jugadores[2].sprite.position.y = 250;
+            this.jugadores[3].sprite.position.x = 1800;
+            this.jugadores[3].sprite.position.y = 750;
+
             this.jugadores[4].sprite.position.x = (juego.ancho_campo / 2) + 50;
             this.jugadores[4].sprite.position.y = (juego.alto_campo / 2) - 120;
 
@@ -44,6 +53,15 @@ function Equipo(juego, cpu){
             this.jugadores[5].sprite.position.y = (juego.alto_campo / 2) + 120;
         }
         else{
+            this.jugadores[0].sprite.position.x = 300;
+            this.jugadores[0].sprite.position.y = 250;
+            this.jugadores[1].sprite.position.x = 300;
+            this.jugadores[1].sprite.position.y = 750;
+            this.jugadores[2].sprite.position.x = 600;
+            this.jugadores[2].sprite.position.y = 250;
+            this.jugadores[3].sprite.position.x = 600;
+            this.jugadores[3].sprite.position.y = 750;
+            
             this.jugadores[4].sprite.position.x = (juego.ancho_campo / 2) - 50;
             this.jugadores[4].sprite.position.y = (juego.alto_campo / 2) - 120;
 

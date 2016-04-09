@@ -159,7 +159,7 @@ DudeFootball.Play.prototype = {
         this.equipo_CPU.inicializa_equipo();
         // TODO: Mejorar lo de jugador activo y revisar el activo rival
         this.jugador_rival_activo = this.equipo_CPU.jugadores[0];
-        this.equipo_CPU.portero = new Portero(this.game, this.game.ancho_campo-70, this.game.alto_campo/2, true);
+        this.equipo_CPU.portero = new Portero(this.game, this.game.ancho_campo-100, this.game.alto_campo/2, true);
 
 
         //EQUIPO JUGADOR
@@ -168,7 +168,7 @@ DudeFootball.Play.prototype = {
 
         // TODO: Mejorar lo de jugador activo
         this.jugador_activo = this.equipo_jugador.jugadores[0];
-        this.equipo_jugador.portero = new Portero(this.game, 70, this.game.alto_campo/2, false);
+        this.equipo_jugador.portero = new Portero(this.game, 100, this.game.alto_campo/2, false);
 
 
         this.equipo_jugador.posiciona_saquecentro();
@@ -317,7 +317,6 @@ DudeFootball.Play.prototype = {
         this.pelota.sprite.position.x = this.game.inicio_pelota_x;
         this.pelota.sprite.position.y = this.game.inicio_pelota_y;
         this.pelota.sprite.body.velocity.setTo(0);
-
     },
 
     entra_botonA: function (){
@@ -853,9 +852,9 @@ DudeFootball.Play.prototype = {
             this.joy.holder.events.onMove.add(this.procesaDragg, this);
             this.joy.holder.events.onUp.add(this.paraDragg, this);
         }
-
-        this.movimientos_teclas();
-        
+        else{
+            this.movimientos_teclas();
+        }
 
 
         if (this.portero_controla){
