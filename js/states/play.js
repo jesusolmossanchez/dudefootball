@@ -29,7 +29,7 @@ DudeFootball.Play.prototype = {
         this.game.cargador1_x = 5;
         this.game.cargador1_y = 5;
 
-        this.rectangulo_deadzone = new Phaser.Rectangle(400, 250, 100, 100);
+        this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight-50, 100, 100);
 
         this.game.max_potencia = 100;
 
@@ -221,10 +221,7 @@ DudeFootball.Play.prototype = {
     },
     update: function() {
 
-        if(this.game.tiempo_sacando > this.time.now){
-            this.texto_previo.text = Math.floor((this.game.tiempo_sacando - this.time.now)/1000);
-            return true;
-        }
+        
         this.texto_previo.text = "";
 
         // Reseteo la velocidad de los porteros, par que no se muevan en las colisiones
@@ -244,6 +241,11 @@ DudeFootball.Play.prototype = {
         //Proceso posiciones de sprites (fakes y no) de los jugadores
         this.procesa_sprites();
         this.procesa_sprites_rival();
+
+        if(this.game.tiempo_sacando > this.time.now){
+            this.texto_previo.text = Math.floor((this.game.tiempo_sacando - this.time.now)/1000);
+            return true;
+        }
 
 
         if(this.centrando_time > this.time.now){
@@ -470,12 +472,13 @@ DudeFootball.Play.prototype = {
                     && this.equipo_jugador.cuantos_a_por_pelota < this.game.max_a_por_pelota){
                     //TODO: Solo uno o dos a por la pelota
                     jugadores_cerca.push(i);
+                    this.equipo_jugador.jugadores[i].sprite.animations.play('semueve');
                     this.game.physics.arcade.moveToObject(this.equipo_jugador.jugadores[i].sprite, this.pelota.sprite, this.game.velocidad_jugador, 0);
                     this.equipo_jugador.cuantos_a_por_pelota++;
                 }
                 else{
                     if (this.equipo_jugador.jugadores[i].aturdido_time < this.time.now){
-
+                        this.equipo_jugador.jugadores[i].sprite.animations.play('semueve');
                         var ajusta_carca_area = 1.2;
                         if (this.equipo_jugador.jugadores[i].sprite.x < 500){
                             ajusta_carca_area = 1.5;
@@ -532,12 +535,13 @@ DudeFootball.Play.prototype = {
                     && (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now)
                     && this.equipo_CPU.cuantos_a_por_pelota < this.game.max_a_por_pelota){
 
+                    this.equipo_CPU.jugadores[i].sprite.animations.play('semueve');
                     this.game.physics.arcade.moveToObject(this.equipo_CPU.jugadores[i].sprite, this.pelota.sprite.body, this.game.velocidad_jugador, 0);
                     this.equipo_CPU.cuantos_a_por_pelota++;
                 }
                 else{
                     if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
-
+                        this.equipo_CPU.jugadores[i].sprite.animations.play('semueve');
                         var ajusta_carca_area = 1.2;
                         if (this.equipo_jugador.jugadores[i].sprite.x < 500){
                             ajusta_carca_area = 1.5;
@@ -579,8 +583,12 @@ DudeFootball.Play.prototype = {
         this.graphics.clear();
 
         //Color de la linea del campo
-        this.graphics.lineStyle(2, 0x0000ff, 2);
-        this.graphics.drawRect(0, 0, 240, 100);
+        this.graphics.lineStyle(2, 0xffffff, 2);
+        this.graphics.drawRect(0, 0, 120, 100);
+        this.graphics.drawRect(120, 0, 120, 100);
+        this.graphics.drawRect(0, 25, 25, 50);
+        this.graphics.drawRect(215, 25, 25, 50);
+        this.graphics.drawCircle(120, 50, 40);
 
         //Color de la linea de los jugadores
         this.graphics.lineStyle(2, 0xff0000, 2);
@@ -588,12 +596,14 @@ DudeFootball.Play.prototype = {
         for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) { 
             this.graphics.drawCircle(this.equipo_jugador.jugadores[i].sprite.position.x/10, this.equipo_jugador.jugadores[i].sprite.position.y/10, 4);
         }
+        this.graphics.drawCircle(this.equipo_jugador.portero.sprite.position.x/10, this.equipo_jugador.portero.sprite.position.y/10, 4);
         
         //Color de la linea de los jugadores rivales
         this.graphics.lineStyle(2, 0x00ff00, 2);
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
             this.graphics.drawCircle(this.equipo_CPU.jugadores[i].sprite.position.x/10, this.equipo_CPU.jugadores[i].sprite.position.y/10, 4);
         }
+        this.graphics.drawCircle(this.equipo_CPU.portero.sprite.position.x/10, this.equipo_jugador.portero.sprite.position.y/10, 4);
 
         //Pinto pelota
         this.graphics.lineStyle(2, 0xffffff, 2);

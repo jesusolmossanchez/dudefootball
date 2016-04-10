@@ -27,7 +27,7 @@ function Player(juego, x, y, cpu){
 
     //Animación
     this.sprite.animations.add('semueve', [0,1], 7, true);
-    this.sprite.animations.add('aturdido', [2], 5, true);
+    this.sprite.animations.add('aturdido', [2,3], 5, true);
 
     //Añado la fisica
     juego.physics.arcade.enable(this.sprite);
