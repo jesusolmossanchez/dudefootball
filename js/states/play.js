@@ -41,8 +41,8 @@ DudeFootball.Play.prototype = {
         this.game.velocidad_salto = 400;
         this.game.gravedad_salto = 900;
 
-        this.posicion_pelota_controlando_x = 20;
-        this.posicion_pelota_controlando_y = 5;
+        this.posicion_pelota_controlando_x = 35;
+        this.posicion_pelota_controlando_y = 0;
 
         this.velocidad_chute_normal = 800;
         this.velocidad_chute_super = 1500;
@@ -139,13 +139,13 @@ DudeFootball.Play.prototype = {
         this.borde_izq.enableBody = true;
         this.game.physics.arcade.enable(this.borde_izq);
         this.borde_izq.body.immovable = true;
-	    //this.borde_izq.alpha = 0;
+	    this.borde_izq.alpha = 0;
 
         this.borde_der = this.game.add.sprite(this.game.ancho_campo-20, 0, "suelo_fake_vertical");
         this.borde_der.enableBody = true;
         this.game.physics.arcade.enable(this.borde_der);
         this.borde_der.body.immovable = true;
-        //this.borde_der.alpha = 0;
+        this.borde_der.alpha = 0;
 
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -160,6 +160,8 @@ DudeFootball.Play.prototype = {
         // TODO: Mejorar lo de jugador activo y revisar el activo rival
         this.jugador_rival_activo = this.equipo_CPU.jugadores[0];
         this.equipo_CPU.portero = new Portero(this.game, this.game.ancho_campo-100, this.game.alto_campo/2, true);
+
+        
 
 
         //EQUIPO JUGADOR
@@ -406,10 +408,10 @@ DudeFootball.Play.prototype = {
     procesa_sprites_rival: function(){
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) {
             if (this.equipo_CPU.jugadores[i].sprite.body.velocity.x < 0){
-                this.equipo_CPU.jugadores[i].sprite.scale.x = 1;
+                this.equipo_CPU.jugadores[i].sprite.scale.x = -1;
             }
             else{
-                this.equipo_CPU.jugadores[i].sprite.scale.x = -1;
+                this.equipo_CPU.jugadores[i].sprite.scale.x = 1;
             }
             this.equipo_CPU.jugadores[i].pelota_enlacabeza = false;
             if (this.equipo_CPU.jugadores[i].saltando){
