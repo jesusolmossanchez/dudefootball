@@ -29,7 +29,7 @@ DudeFootball.Play.prototype = {
         this.game.cargador1_x = 5;
         this.game.cargador1_y = 5;
 
-        this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight-50, 100, 100);
+        this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight-50, 100, 20);
 
         this.game.max_potencia = 100;
 
@@ -58,7 +58,7 @@ DudeFootball.Play.prototype = {
         this.tiempo_centrando = 1200;
         this.tiempo_chutando = 150;
         this.game.tiempo_lanzandose = 250;
-        this.game.tiempo_aturdido = 2000;
+        this.game.tiempo_aturdido = 4000;
 
         this.game.max_tiempo_supertiro = 2000;
 
@@ -135,13 +135,13 @@ DudeFootball.Play.prototype = {
         this.borde_inferior.alpha = 0;
 
     	//TODO: El suelo fake vertical
-    	this.borde_izq = this.game.add.sprite(50, 0, "suelo_fake_vertical");
+    	this.borde_izq = this.game.add.sprite(20, 0, "suelo_fake_vertical");
         this.borde_izq.enableBody = true;
         this.game.physics.arcade.enable(this.borde_izq);
         this.borde_izq.body.immovable = true;
 	    //this.borde_izq.alpha = 0;
 
-        this.borde_der = this.game.add.sprite(this.game.ancho_campo-50, 0, "suelo_fake_vertical");
+        this.borde_der = this.game.add.sprite(this.game.ancho_campo-20, 0, "suelo_fake_vertical");
         this.borde_der.enableBody = true;
         this.game.physics.arcade.enable(this.borde_der);
         this.borde_der.body.immovable = true;
@@ -311,8 +311,15 @@ DudeFootball.Play.prototype = {
     sacar_de_centro: function(cpu){
         this.game.tiempo_sacando = this.time.now + this.game.tiempo_antes_sacar;
 
-        this.equipo_jugador.posiciona_saquecentro();
-        this.equipo_CPU.posiciona_saquecentro();
+        var quien;
+        if (cpu){
+            quien = "cpu";
+        }
+        else{
+            quien = "jugador";
+        }
+        this.equipo_jugador.posiciona_saquecentro(quien);
+        this.equipo_CPU.posiciona_saquecentro(quien);
         
         this.pelota.sprite.position.x = this.game.inicio_pelota_x;
         this.pelota.sprite.position.y = this.game.inicio_pelota_y;
@@ -1399,7 +1406,7 @@ DudeFootball.Play.prototype = {
     },
 
     sale_izquierda: function(){
-        if (this.pelota.sprite.position.y > 400 && this.pelota.sprite.position.y < 700){
+        if (this.pelota.sprite.position.y > 350 && this.pelota.sprite.position.y < 650){
             this.sacar_de_centro(true);
         }
         else{
@@ -1409,7 +1416,7 @@ DudeFootball.Play.prototype = {
 
 
     sale_derecha: function(){
-        if (this.pelota.sprite.position.y > 400 && this.pelota.sprite.position.y < 700){
+        if (this.pelota.sprite.position.y > 350 && this.pelota.sprite.position.y < 650){
             this.sacar_de_centro();
         }
         else{
