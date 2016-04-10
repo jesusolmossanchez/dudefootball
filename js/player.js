@@ -28,6 +28,7 @@ function Player(juego, x, y, cpu){
     //Animación
     this.sprite.animations.add('semueve', [0,1], 4, true);
     this.sprite.animations.add('aturdido', [2,3], 5, true);
+    this.sprite.animations.add('metepie', [4], 5, true);
 
     //Añado la fisica
     juego.physics.arcade.enable(this.sprite);
@@ -165,13 +166,8 @@ function Player(juego, x, y, cpu){
 
     this.dispara = function(donde) {
         //TODO: LOGICA DEL DISPARO!!!
-        console.log("piaum!",donde);
-    }
-
-    this.se_lanza = function(donde) {
-        //TODO: LOGICA DEL DISPARO!!!
-        console.log("me lanzooo!",donde);
         this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
+        this.sprite.animations.play('metepie');
         if (donde == 2){
             this.sprite.angle = 0;
             this.fake_sprite.angle = 0;
@@ -220,6 +216,16 @@ function Player(juego, x, y, cpu){
             this.sprite.body.velocity.x = -juego.velocidedad_lanzado;
             this.sprite.body.velocity.y = juego.velocidedad_lanzado;
         }
+    }
+
+    this.se_lanza = function(donde) {
+        //TODO: LOGICA DEL DISPARO!!!
+        console.log("me lanzooo!",donde);
+        this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
+        this.sprite.animations.play('metepie');
+        /*
+        
+        */
     }
 
     this.estoy_cerca = function(posicion) {
