@@ -22,16 +22,16 @@ function Pelota(juego){
 
     this.frena = function() {
         if(this.sprite.body.velocity.x > 0){
-            this.sprite.body.velocity.x -= 2;
+            this.sprite.body.velocity.x -= 3;
         }
         if(this.sprite.body.velocity.x < 0){
-            this.sprite.body.velocity.x += 2;
+            this.sprite.body.velocity.x += 3;
         }
         if(this.sprite.body.velocity.y > 0){
-            this.sprite.body.velocity.y -= 2;
+            this.sprite.body.velocity.y -= 3;
         }
         if(this.sprite.body.velocity.y < 0){
-            this.sprite.body.velocity.y += 2;
+            this.sprite.body.velocity.y += 3;
         }
     }
 

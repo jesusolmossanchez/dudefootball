@@ -29,6 +29,8 @@ function Player(juego, x, y, cpu){
     this.sprite.animations.add('semueve', [0,1], 4, true);
     this.sprite.animations.add('aturdido', [2,3], 5, true);
     this.sprite.animations.add('metepie', [4], 5, true);
+    this.sprite.animations.add('salta', [5], 5, true);
+    this.sprite.animations.add('cabezazo', [6], 5, true);
 
     //Añado la fisica
     juego.physics.arcade.enable(this.sprite);
@@ -102,7 +104,10 @@ function Player(juego, x, y, cpu){
     }
 
     this.mueve = function(adonde) {
-        this.sprite.animations.play('semueve');
+        if (!this.saltando){
+            this.sprite.animations.play('semueve');
+        }
+        
         var mi_velocidad;
         if (this.controlando){
             mi_velocidad = juego.velocidad_jugador_con_pelota;
@@ -245,10 +250,16 @@ function Player(juego, x, y, cpu){
 
     this.aturdir = function(posicion) {
         console.log("me quedo loco!");
+        this.sprite.angle = -90;
         this.sprite.animations.play('aturdido');
         this.controlando = false;
         this.aturdido_time = juego.time.now + juego.tiempo_aturdido;
 
+    }
+
+    this.voy_al_choque = function() {
+        //TODO: Controlar cuando va al choque el rival
+        return false;
     }
 
 }
