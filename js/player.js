@@ -31,6 +31,7 @@ function Player(juego, x, y, cpu){
     this.sprite.animations.add('metepie', [4], 5, true);
     this.sprite.animations.add('salta', [5], 5, true);
     this.sprite.animations.add('cabezazo', [6], 5, true);
+    this.sprite.animations.add('chuta', [7], 5, true);
 
     //Añado la fisica
     juego.physics.arcade.enable(this.sprite);
@@ -92,6 +93,11 @@ function Player(juego, x, y, cpu){
     this.ajusta_sombra_saltando = function(){
         this.sombra.position.x = this.sprite.position.x;
         this.sombra.position.y = this.suelo_saltando_fake.body.position.y;
+    },
+
+    this.ajusta_sombra_aturdido = function(){
+        this.sombra.position.x = this.sprite.position.x;
+        this.sombra.position.y = this.sprite.position.y + 20;
     }
 
     this.resetea_velocidad = function() {
@@ -103,8 +109,12 @@ function Player(juego, x, y, cpu){
         //this.fake_sprite.body.velocity.y = 0;
     }
 
+    this.resetea_angulo = function(){
+
+    }
+
     this.mueve = function(adonde) {
-        if (!this.saltando){
+        if (!this.saltando && this.chute_time < juego.time.now){
             this.sprite.animations.play('semueve');
         }
         
@@ -223,11 +233,10 @@ function Player(juego, x, y, cpu){
         }
     }
 
-    this.se_lanza = function(donde) {
+    this.se_lanza = function() {
         //TODO: LOGICA DEL DISPARO!!!
-        console.log("me lanzooo!",donde);
         this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
-        this.sprite.animations.play('metepie');
+        //this.sprite.animations.play('metepie');
         /*
         
         */
@@ -250,7 +259,8 @@ function Player(juego, x, y, cpu){
 
     this.aturdir = function(posicion) {
         console.log("me quedo loco!");
-        this.sprite.angle = -90;
+
+        this.sprite.angle = Math.random()>0.5 ? -90 : 90;
         this.sprite.animations.play('aturdido');
         this.controlando = false;
         this.aturdido_time = juego.time.now + juego.tiempo_aturdido;
@@ -258,7 +268,9 @@ function Player(juego, x, y, cpu){
     }
 
     this.voy_al_choque = function() {
-        //TODO: Controlar cuando va al choque el rival
+        if (juego.time.now < this.lanzado_time){
+            return true;
+        }
         return false;
     }
 
