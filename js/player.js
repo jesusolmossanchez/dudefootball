@@ -109,8 +109,9 @@ function Player(juego, x, y, cpu){
         //this.fake_sprite.body.velocity.y = 0;
     }
 
-    this.resetea_angulo = function(){
-
+    this.resetea_velocidad_no_angulo = function(){
+        this.sprite.body.velocity.x = 0;
+        this.sprite.body.velocity.y = 0;
 
     }
 
