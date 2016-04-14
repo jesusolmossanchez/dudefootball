@@ -394,6 +394,7 @@ DudeFootball.Play.prototype = {
                 //Si no se está lanzando, resetea la velocidad
                 if (this.time.now > this.equipo_jugador.jugadores[i].lanzado_time && this.time.now > this.equipo_jugador.jugadores[i].aturdido_time){
                     this.equipo_jugador.jugadores[i].resetea_velocidad();
+                    
                 }
                 else{
                     this.equipo_jugador.jugadores[i].ajusta_sombra_aturdido();
@@ -423,6 +424,7 @@ DudeFootball.Play.prototype = {
                 this.physics.arcade.collide(this.equipo_CPU.jugadores[i].sprite, this.borde_superior);
                 this.physics.arcade.collide(this.equipo_CPU.jugadores[i].sprite, this.borde_inferior);
                 //Si no se está lanzando, resetea la velocidad
+
                 if (this.time.now > this.equipo_CPU.jugadores[i].lanzado_time && this.time.now > this.equipo_CPU.jugadores[i].aturdido_time){
                     this.equipo_CPU.jugadores[i].resetea_velocidad();
                 }
@@ -508,6 +510,14 @@ DudeFootball.Play.prototype = {
                     }
                 }
             }
+
+            
+            for (var j = 0; j < this.equipo_CPU.jugadores.length; j++) {
+                if (this.equipo_CPU.jugadores[j].super_lanzado_time > this.time.now){
+                    this.physics.arcade.overlap(this.equipo_jugador.jugadores[i].fake_sprite, this.equipo_CPU.jugadores[j].fake_sprite, function(){this.me_hacen_una_entrada(i);} , null, this); 
+                }  
+            }
+            
         }
 
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) {
@@ -524,7 +534,24 @@ DudeFootball.Play.prototype = {
                     }
                 }
             }
+            
+            for (var j = 0; j < this.equipo_jugador.jugadores.length; j++) {
+                if (this.equipo_jugador.jugadores[j].super_lanzado_time > this.time.now){
+                    this.physics.arcade.overlap(this.equipo_jugador.jugadores[i].fake_sprite, this.equipo_CPU.jugadores[j].fake_sprite, function(){this.me_hacen_una_entrada_rival(i);} , null, this); 
+                }  
+            }
+            
         }
+    },
+
+    me_hacen_una_entrada: function(i){
+        console.log("me hacen")
+        this.equipo_jugador.jugadores[i].aturdir();
+    },
+
+    me_hacen_una_entrada_rival: function(i){
+
+        this.equipo_CPU.jugadores[i].aturdir();
     },
 
     procesa_inputs: function(){
@@ -911,10 +938,10 @@ DudeFootball.Play.prototype = {
                     if (this.equipo_jugador.jugadores[i].aturdido_time < this.time.now){
                         this.equipo_jugador.jugadores[i].sprite.animations.play('semueve');
                         var ajusta_carca_area = 1.2;
-                        if (this.equipo_jugador.jugadores[i].sprite.x < 500){
-                            ajusta_carca_area = 1.5;
+                        if (this.equipo_jugador.jugadores[i].sprite.x < this.game.ancho_campo/2){
+                            ajusta_carca_area = 3.5;
                         }
-                        if (this.equipo_jugador.jugadores[i].sprite.x > this.game.ancho_campo - 500){
+                        if (this.equipo_jugador.jugadores[i].sprite.x > this.game.ancho_campo/2){
                             ajusta_carca_area = 1.5;
                         }
 
@@ -960,15 +987,23 @@ DudeFootball.Play.prototype = {
         // Analogo al anterior
         this.equipo_CPU.cuantos_a_por_pelota = 0;
         for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
-            if (!this.equipo_CPU.jugadores[i].saltando){
-                //if (this.jugador_rival_activo.controlando && (this.equipo_CPU.jugadores[i] != this.jugador_rival_activo)){
+            if (!this.equipo_CPU.jugadores[i].saltando && this.equipo_CPU.jugadores[i].lanzado_time < this.time.now){
                 if (this.jugador_rival_activo.controlando && (this.equipo_CPU.jugadores[i] == this.jugador_rival_activo)){
-                    console.log("controlando");
+                    //console.log("controlando");
                 }
                 else{
-                    if(this.equipo_CPU.jugadores[i].check_distancia(this.pelota.sprite.body.position) < 100 && this.jugador_activo.controlando){
-                        this.equipo_CPU.jugadores[i].se_lanza();
-                        console.log("se lanza rival?")
+                    if(this.equipo_CPU.jugadores[i].check_distancia(this.pelota.sprite.body.position) < 100 
+                        && this.jugador_activo.controlando
+                        && this.equipo_CPU.jugadores[i].lanzado_time < this.time.now){
+                        if (Math.random()>0.2){
+                            this.equipo_CPU.jugadores[i].se_lanza();
+                        }
+                        else{
+                            console.log("dispara")
+                            this.equipo_CPU.jugadores[i].dispara(Math.floor(Math.random()*9)+1);
+                        }
+                        
+                        //console.log("se lanza rival?")
                         //TODO: tirarse
                     }
                     if (this.equipo_CPU.jugadores[i].estoy_cerca(this.pelota.sprite.body.position) 
@@ -976,49 +1011,64 @@ DudeFootball.Play.prototype = {
                         && (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now)
                         && this.equipo_CPU.cuantos_a_por_pelota < this.game.max_a_por_pelota){
 
+                        
                         this.equipo_CPU.jugadores[i].sprite.animations.play('semueve');
                         this.game.physics.arcade.moveToObject(this.equipo_CPU.jugadores[i].sprite, this.pelota.sprite.body, this.game.velocidad_jugador, 0);
-                        this.equipo_CPU.cuantos_a_por_pelota++;
+                        this.equipo_CPU.cuantos_a_por_pelota++; 
+                        
                     }
                     else{
-                        if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
+                        if (this.jugador_activo.controlando && this.equipo_CPU.jugadores[i].sprite.position.x > this.pelota.sprite.position.x
+                            && this.pelota.sprite.position.x > this.ancho_campo - 500){
                             this.equipo_CPU.jugadores[i].sprite.animations.play('semueve');
-                            var ajusta_carca_area = 1.2;
-                            if (this.equipo_jugador.jugadores[i].sprite.x < 500){
-                                ajusta_carca_area = 1.5;
-                            }
-                            if (this.equipo_jugador.jugadores[i].sprite.x > this.game.ancho_campo - 500){
-                                ajusta_carca_area = 1.5;
-                            }
-
-                            var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
-                                            + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
-                            var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
-                            if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
-                                this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
-                                this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
-                                this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
-                            }
-                            var donde_ir = new Phaser.Point(this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea);
-                            if (this.equipo_CPU.jugadores[i].check_distancia(donde_ir) < 70 ){
-                                var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
-                                            + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
-                                var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
-                                if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
-                                    this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
-                                    this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
-                                    this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
-                                }
-                            }
-                            else{
-                                this.game.physics.arcade.moveToXY(this.equipo_CPU.jugadores[i].sprite, this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
-                            }
+                            this.game.physics.arcade.moveToObject(this.equipo_CPU.jugadores[i].sprite, this.pelota.sprite.body, this.game.velocidad_jugador, 0);
+                            
                         }
+                        else{
+                            this.mueve_su_posicion_rival(i);
+                        }
+
                     }
                 }
                 
             }
         } 
+    },
+
+    mueve_su_posicion_rival: function(i){
+        if (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now){
+            this.equipo_CPU.jugadores[i].sprite.animations.play('semueve');
+            var ajusta_carca_area = 1.2;
+            if (this.equipo_CPU.jugadores[i].sprite.x < this.game.ancho_campo/2){
+                ajusta_carca_area = 1.5;
+            }
+            if (this.equipo_CPU.jugadores[i].sprite.x > this.game.ancho_campo/2){
+                ajusta_carca_area = 3.5;
+            }
+
+            var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
+                            + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+            var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
+            if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
+                this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
+                this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
+                this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
+            }
+            var donde_ir = new Phaser.Point(this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea);
+            if (this.equipo_CPU.jugadores[i].check_distancia(donde_ir) < 70 ){
+                var aleatorio = (this.game.ancho_campo - (this.amplitud_equipo*(this.game.ancho_campo - this.equipo_CPU.jugadores[i].posicion_inicial.x)) - this.factor_ataque) 
+                            + (this.pelota.sprite.x - this.game.inicio_pelota_x)/ajusta_carca_area + (Math.floor(Math.random() * 400) - 200);
+                var aleatorio2 = this.equipo_CPU.jugadores[i].posicion_inicial.y + (this.pelota.sprite.y - this.game.inicio_pelota_y)/this.factor_bascula_y + (Math.floor(Math.random() * 300) - 150);
+                if (this.game.time.now > this.equipo_CPU.jugadores[i].cambio_aleatorio_time){
+                    this.equipo_CPU.jugadores[i].x_aleatorea = aleatorio;
+                    this.equipo_CPU.jugadores[i].y_aleatorea = aleatorio2;
+                    this.equipo_CPU.jugadores[i].cambio_aleatorio_time = this.game.time.now + 1000;
+                }
+            }
+            else{
+                this.game.physics.arcade.moveToXY(this.equipo_CPU.jugadores[i].sprite, this.equipo_CPU.jugadores[i].x_aleatorea, this.equipo_CPU.jugadores[i].y_aleatorea, this.game.velocidad_jugador, 0);
+            }
+        }
     },
 
     sacar_de_centro: function(cpu){
@@ -1645,11 +1695,11 @@ DudeFootball.Play.prototype = {
     },
 
     saca_portero: function(){
-        console.log("saca portero");
+        //console.log("saca portero");
     },
 
     saca_portero_rival: function(){
-        console.log("saca portero");
+        //console.log("saca portero");
     },
 
     controla_portero: function(){

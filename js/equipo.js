@@ -10,20 +10,20 @@ function Equipo(juego, cpu){
 
         // TODO: Hacer las distancias relativas al campo
     	if (this.is_CPU){
-        	this.jugadores.push(new Player(juego, 2100, 250, true));
-	        this.jugadores.push(new Player(juego, 2100, 750, true));
-	        this.jugadores.push(new Player(juego, 1800, 250, true));
-	        this.jugadores.push(new Player(juego, 1800, 750, true));
-	        this.jugadores.push(new Player(juego, 1500, 250, true));
-	        this.jugadores.push(new Player(juego, 1500, 750, true));
+        	this.jugadores.push(new Player(juego, 2100, 280, true));
+	        this.jugadores.push(new Player(juego, 2100, 720, true));
+	        this.jugadores.push(new Player(juego, 1800, 280, true));
+	        this.jugadores.push(new Player(juego, 1800, 720, true));
+	        this.jugadores.push(new Player(juego, 1500, 300, true));
+	        this.jugadores.push(new Player(juego, 1500, 700, true));
     	}
     	else{
-    		this.jugadores.push(new Player(juego, 300, 250));
-	        this.jugadores.push(new Player(juego, 300, 750));
-	        this.jugadores.push(new Player(juego, 600, 250));
-	        this.jugadores.push(new Player(juego, 600, 750));
-	        this.jugadores.push(new Player(juego, 900, 250));
-	        this.jugadores.push(new Player(juego, 900, 750));
+    		this.jugadores.push(new Player(juego, 300, 280));
+	        this.jugadores.push(new Player(juego, 300, 720));
+	        this.jugadores.push(new Player(juego, 600, 280));
+	        this.jugadores.push(new Player(juego, 600, 720));
+	        this.jugadores.push(new Player(juego, 900, 300));
+	        this.jugadores.push(new Player(juego, 900, 700));
     	}
    	}
 
@@ -38,19 +38,19 @@ function Equipo(juego, cpu){
     this.posiciona_saquecentro = function(quien){
         if (this.is_CPU){
             this.jugadores[0].sprite.position.x = 2100;
-            this.jugadores[0].sprite.position.y = 250;
+            this.jugadores[0].sprite.position.y = 280;
             this.jugadores[1].sprite.position.x = 2100;
-            this.jugadores[1].sprite.position.y = 750;
+            this.jugadores[1].sprite.position.y = 720;
             this.jugadores[2].sprite.position.x = 1800;
-            this.jugadores[2].sprite.position.y = 250;
+            this.jugadores[2].sprite.position.y = 280;
             this.jugadores[3].sprite.position.x = 1800;
-            this.jugadores[3].sprite.position.y = 750;
+            this.jugadores[3].sprite.position.y = 720;
 
             if (quien === "cpu"){
                 this.jugadores[4].sprite.position.x = 1500;
-                this.jugadores[4].sprite.position.y = 250;
+                this.jugadores[4].sprite.position.y = 300;
                 this.jugadores[5].sprite.position.x = 1500;
-                this.jugadores[5].sprite.position.y = 750;
+                this.jugadores[5].sprite.position.y = 700;
             }
             else{
                 this.jugadores[4].sprite.position.x = (juego.ancho_campo / 2) + 50;
@@ -63,19 +63,19 @@ function Equipo(juego, cpu){
         }
         else{
             this.jugadores[0].sprite.position.x = 300;
-            this.jugadores[0].sprite.position.y = 250;
+            this.jugadores[0].sprite.position.y = 280;
             this.jugadores[1].sprite.position.x = 300;
-            this.jugadores[1].sprite.position.y = 750;
+            this.jugadores[1].sprite.position.y = 720;
             this.jugadores[2].sprite.position.x = 600;
-            this.jugadores[2].sprite.position.y = 250;
+            this.jugadores[2].sprite.position.y = 280;
             this.jugadores[3].sprite.position.x = 600;
-            this.jugadores[3].sprite.position.y = 750;
+            this.jugadores[3].sprite.position.y = 720;
             
             if (quien === "jugador"){
                 this.jugadores[4].sprite.position.x = 900;
-                this.jugadores[4].sprite.position.y = 250;
+                this.jugadores[4].sprite.position.y = 300;
                 this.jugadores[5].sprite.position.x = 900;
-                this.jugadores[5].sprite.position.y = 750;
+                this.jugadores[5].sprite.position.y = 700;
             }
             else{
                 this.jugadores[4].sprite.position.x = (juego.ancho_campo / 2) - 50;

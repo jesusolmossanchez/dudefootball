@@ -111,6 +111,7 @@ function Player(juego, x, y, cpu){
 
     this.resetea_angulo = function(){
 
+
     }
 
     this.mueve = function(adonde) {
@@ -182,7 +183,9 @@ function Player(juego, x, y, cpu){
     this.dispara = function(donde) {
         //TODO: LOGICA DEL DISPARO!!!
         this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
-        this.sprite.animations.play('metepie');
+
+        this.super_lanzado_time = juego.time.now + juego.tiempo_lanzandose;
+        //this.sprite.animations.play('metepie');
         if (donde == 2){
             this.sprite.angle = 0;
             this.fake_sprite.angle = 0;
@@ -258,7 +261,7 @@ function Player(juego, x, y, cpu){
     }
 
     this.aturdir = function(posicion) {
-        console.log("me quedo loco!");
+        //console.log("me quedo loco!");
 
         this.sprite.angle = Math.random()>0.5 ? -90 : 90;
         this.sprite.animations.play('aturdido');
