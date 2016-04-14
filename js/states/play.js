@@ -995,18 +995,18 @@ DudeFootball.Play.prototype = {
                     if(this.equipo_CPU.jugadores[i].check_distancia(this.pelota.sprite.body.position) < 100 
                         && this.jugador_activo.controlando
                         && this.equipo_CPU.jugadores[i].lanzado_time < this.time.now){
-                        if (Math.random()>0.2){
-                            this.equipo_CPU.jugadores[i].se_lanza();
-                        }
-                        else{
+                        //if (Math.random()>0.2){
+                        //    this.equipo_CPU.jugadores[i].se_lanza();
+                        //}
+                        //else{
                             console.log("dispara")
                             this.equipo_CPU.jugadores[i].dispara(Math.floor(Math.random()*9)+1);
-                        }
+                        //}
                         
                         //console.log("se lanza rival?")
                         //TODO: tirarse
                     }
-                    if (this.equipo_CPU.jugadores[i].estoy_cerca(this.pelota.sprite.body.position) 
+                    else if (this.equipo_CPU.jugadores[i].estoy_cerca(this.pelota.sprite.body.position) 
                         && !this.jugador_rival_activo.controlando 
                         && (this.equipo_CPU.jugadores[i].aturdido_time < this.time.now)
                         && this.equipo_CPU.cuantos_a_por_pelota < this.game.max_a_por_pelota){
