@@ -29,7 +29,7 @@ DudeFootball.Play.prototype = {
         this.game.cargador1_x = 5;
         this.game.cargador1_y = 5;
 
-        this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight-50, 100, 10);
+        this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight/2-5, 100, 10);
 
         this.game.max_potencia = 100;
 
@@ -238,9 +238,10 @@ DudeFootball.Play.prototype = {
         this.texto_previo.fixedToCamera = true;
 
         this.music = this.add.audio('musica');
-        this.music.play(null, 0, 0.51, true);
+        this.music.play(null, 0, 0.1, true);
 
         //TODO: Marcadores
+
     },
     update: function() {
 
