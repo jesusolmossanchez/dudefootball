@@ -5,6 +5,7 @@ function Portero(juego, x, y, cpu){
         this.sprite = juego.add.sprite (x, y,'portero_cpu');
         this.is_cpu = true;
         this.area = new Phaser.Rectangle(juego.ancho_campo-400, juego.alto_campo/2-300, 400, 600);
+        this.sprite.scale.x = -1;
     }
     else{
         this.sprite = juego.add.sprite (x, y,'portero');
@@ -13,6 +14,10 @@ function Portero(juego, x, y, cpu){
     }
 
     this.sprite.anchor.setTo(0.5, 0.5);
+
+    this.sprite.animations.add('semueve', [0,1], 7, true);
+    this.sprite.animations.add('coge_pelota', [2], 5, true);
+    this.sprite.animations.add('selanza', [3], 5, true);
 
     this.posicion_inicial = new Phaser.Point(x,y);
 
