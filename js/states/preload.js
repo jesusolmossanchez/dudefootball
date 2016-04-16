@@ -33,8 +33,8 @@ DudeFootball.Preload.prototype = {
 
         this.load.image('joy_back', 'assets/joy_back.png');
         this.load.image('joy_front', 'assets/joy_front.png');
-        this.load.image('botonA', 'assets/botonA.png');
-        this.load.image('botonB', 'assets/botonB.png');
+        this.load.spritesheet('botonA', 'assets/botonA.png',120,120);
+        this.load.spritesheet('botonB', 'assets/botonB.png',120,120);
 
         this.load.image('cargador1', 'assets/cargador.png');
 

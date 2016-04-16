@@ -72,9 +72,9 @@ function Equipo(juego, cpu){
             this.jugadores[3].sprite.position.y = 720;
             
             if (quien === "jugador"){
-                this.jugadores[4].sprite.position.x = 900;
+                this.jugadores[4].sprite.position.x = 1300;
                 this.jugadores[4].sprite.position.y = 300;
-                this.jugadores[5].sprite.position.x = 900;
+                this.jugadores[5].sprite.position.x = 1300;
                 this.jugadores[5].sprite.position.y = 700;
             }
             else{

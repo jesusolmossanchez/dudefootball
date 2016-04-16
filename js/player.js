@@ -186,7 +186,7 @@ function Player(juego, x, y, cpu){
         this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
 
         this.super_lanzado_time = juego.time.now + juego.tiempo_lanzandose;
-        //this.sprite.animations.play('metepie');
+        this.sprite.animations.play('metepie');
         if (donde == 2){
             this.sprite.angle = 0;
             this.fake_sprite.angle = 0;
@@ -240,10 +240,7 @@ function Player(juego, x, y, cpu){
     this.se_lanza = function() {
         //TODO: LOGICA DEL DISPARO!!!
         this.lanzado_time = juego.time.now + juego.tiempo_lanzandose;
-        //this.sprite.animations.play('metepie');
-        /*
-        
-        */
+        this.sprite.animations.play('metepie');
     }
 
     this.estoy_cerca = function(posicion) {
