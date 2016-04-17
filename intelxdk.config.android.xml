@@ -4,15 +4,15 @@
 <!--To change the contents of this file, see the documentation on the intelxdk.config.additions.xml file.-->
 <intelxdk:version value="1.0"/>
 <intelxdk:cordova-cli version="5.4.1"/>
-<name>dude_football</name>
-<description>Dude football</description>
+<name>DUDE SOCCER</name>
+<description>Arcade Soccer Game</description>
 <author>jolmos</author>
 <content src="index.html"/>
 <access origin="*"/>
-<icon platform="android" src="assets/aaa.png" density="ldpi" width="36" height="36"/>
-<icon platform="android" src="assets/bbb.png" density="mdpi" width="48" height="48"/>
-<icon platform="android" src="assets/ccc.png" density="hdpi" width="72" height="72"/>
-<icon platform="android" src="assets/ddd.png" density="xhdpi" width="96" height="96"/>
+<icon platform="android" src="assets/icon36.png" density="ldpi" width="36" height="36"/>
+<icon platform="android" src="assets/icon48.png" density="mdpi" width="48" height="48"/>
+<icon platform="android" src="assets/icon72.png" density="hdpi" width="72" height="72"/>
+<icon platform="android" src="assets/icon96.png" density="xhdpi" width="96" height="96"/>
 <intelxdk:plugin intelxdk:name="Cordova Network Whitelist Plugin (added by Intel XDK)" intelxdk:value="cordova-plugin-whitelist" intelxdk:version="1.2.1"/>
 <preference name="android-minSdkVersion" value="14"/>
 <preference name="android-targetSdkVersion" value="23"/>

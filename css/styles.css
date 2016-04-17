@@ -12,3 +12,22 @@ canvas{
   	margin-right: auto;
   	cursor: pointer;
 }
+
+@font-face {
+    font-family: 'ArcadeClassic';
+    src:url('../fonts/ArcadeClassic.woff') format('woff'),
+        url('../fonts/ArcadeClassic.svg#ArcadeClassic') format('svg'),
+        url('../fonts/ArcadeClassic.eot'),
+        url('../fonts/ArcadeClassic.eot?#iefix') format('embedded-opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+	font-family: 'ArcadeClassic';
+}
+
+.fontPreload {
+    position:absolute;
+    left:-100px;
+}	

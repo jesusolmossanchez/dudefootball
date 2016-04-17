@@ -6,7 +6,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.webapp",
       "src": "",
       "projectGuid": "ed208db6-c02a-4e01-bb21-492f97788267",
-      "lastModifiedDate": 1459633512919,
+      "lastModifiedDate": 1460925846556,
       "creationDate": 1459631777042
     },
     "sourceDirectory": "",
@@ -56,7 +56,7 @@
           "Orientation": "landscape"
         },
         "isActive_": true,
-        "appName_": "dude_football",
+        "appName_": "DUDE SOCCER",
         "appID_": "jolmos.dude_football",
         "appAccess_": {
           "mode": "whitelist",
@@ -68,25 +68,25 @@
         },
         "icons_": [
           {
-            "relPath": "assets/aaa.png",
+            "relPath": "assets/icon36.png",
             "density": "ldpi",
             "height": 36,
             "width": 36
           },
           {
-            "relPath": "assets/bbb.png",
+            "relPath": "assets/icon48.png",
             "density": "mdpi",
             "height": 48,
             "width": 48
           },
           {
-            "relPath": "assets/ccc.png",
+            "relPath": "assets/icon72.png",
             "density": "hdpi",
             "height": 72,
             "width": 72
           },
           {
-            "relPath": "assets/ddd.png",
+            "relPath": "assets/icon96.png",
             "density": "xhdpi",
             "height": 96,
             "width": 96
@@ -100,7 +100,7 @@
         "appVersionCode_": "1",
         "crosswalkVersion_": "16",
         "cordovaCLIVersion_": "5.4.1",
-        "appDescription_": "Dude football",
+        "appDescription_": "Arcade Soccer Game",
         "appAuthor_": "jolmos"
       },
       "iOS": {

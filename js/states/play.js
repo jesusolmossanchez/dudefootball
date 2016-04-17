@@ -26,8 +26,8 @@ DudeFootball.Play.prototype = {
 
         this.game.default_anchor = 0.5;
 
-        this.game.cargador1_x = window.innerWidth/2;
-        this.game.cargador1_y = window.innerHeight - 150;
+        this.game.cargador1_x = window.innerWidth/2 - 20;
+        this.game.cargador1_y = window.innerHeight - 170;
 
         this.rectangulo_deadzone = new Phaser.Rectangle(window.innerWidth/2 - 50, window.innerHeight/2-5, 100, 10);
 
@@ -206,8 +206,18 @@ DudeFootball.Play.prototype = {
 
         //CARGADOR DE DISPARO
         //TODO: Mejorar sprite y animación!
+        this.wrapper_cargador = this.game.add.image(this.game.cargador1_x, this.game.cargador1_y,'wrapper_cargador');
         this.cargador1 = this.game.add.image(this.game.cargador1_x, this.game.cargador1_y,'cargador1');
+        this.super_potencia_sprite = this.game.add.image(this.game.cargador1_x + 140, this.game.cargador1_y+10,'super_potencia_sprite');
+        
+
+        this.super_potencia_sprite.fixedToCamera = true;
+        this.super_potencia_sprite.alpha = 0;
         this.cargador1.fixedToCamera = true;
+        this.wrapper_cargador.fixedToCamera = true;
+        var corta = new Phaser.Rectangle(0, 0, this.potencia, 48);
+        corta.fixedToCamera = true;
+        this.cargador1.crop(corta); 
 
 
         // CURSORES!!
@@ -238,15 +248,20 @@ DudeFootball.Play.prototype = {
 
 
         //Inicializo texto central antes de empezarar
-        this.texto_previo = this.game.add.text(window.innerWidth/2, window.innerHeight/2, 'Empieza!', { font: '20vw Arial', fill: "#eaff02", align: "center" });
+        this.texto_previo = this.game.add.text(window.innerWidth/2, window.innerHeight/2, 'Empieza!', { font: '18vw ArcadeClassic', fill: "#eaff02", align: "center" });
         this.texto_previo.anchor.setTo(0.5, 0.5);
         this.texto_previo.fixedToCamera = true;
 
-        this.music = this.add.audio('musica');
-        this.music.play(null, 0, 0.1, true);
+        //Inicializo texto central antes de empezarar
+        this.texto_final = this.game.add.text(window.innerWidth/2, window.innerHeight/2, '', { font: '8vw ArcadeClassic', fill: "#eaff02", align: "center" });
+        this.texto_final.anchor.setTo(0.5, 0.5);
+        this.texto_final.fixedToCamera = true;
 
-        this.tiempo_total = this.time.now + 120000
-        this.tiempo = this.game.add.text(window.innerWidth/2, 30, '', { font: '4vw Arial', fill: "#eaff02", align: "center" });
+        this.music = this.add.audio('musica');
+        this.music.play(null, 0, 0.2, true);
+
+        this.tiempo_total = this.time.now + 125000
+        this.tiempo = this.game.add.text(window.innerWidth/2, 30, '', { font: '4vw ArcadeClassic', fill: "#eaff02", align: "center" });
         this.tiempo.anchor.setTo(0.5, 0.5);
         this.tiempo.fixedToCamera = true;
 
@@ -254,11 +269,11 @@ DudeFootball.Play.prototype = {
         this.score1 = 0;
         this.score2 = 0;
 
-        this.marcador1 = this.game.add.text(50, 30, '0', { font: '4vw Arial', fill: "#eaff02", align: "center" });
+        this.marcador1 = this.game.add.text(50, 30, '0', { font: '4vw ArcadeClassic', fill: "#eaff02", align: "center" });
         this.marcador1.anchor.setTo(0.5, 0.5);
         this.marcador1.fixedToCamera = true;
 
-        this.marcador2 = this.game.add.text(window.innerWidth-50, 30, '0', { font: '4vw Arial', fill: "#eaff02", align: "center" });
+        this.marcador2 = this.game.add.text(window.innerWidth-50, 30, '0', { font: '4vw ArcadeClassic', fill: "#eaff02", align: "center" });
         this.marcador2.anchor.setTo(0.5, 0.5);
         this.marcador2.fixedToCamera = true;
 
@@ -315,6 +330,11 @@ DudeFootball.Play.prototype = {
         }
 
         var tiempo_queda = Math.floor((this.tiempo_total - this.time.now)/1000);
+        if (tiempo_queda < 0){
+            this.texto_previo.text = "";
+            this.fin_del_partido();
+            return;
+        }
         if (tiempo_queda > 60){
             var segundos = tiempo_queda%60;
             var metecero = "";
@@ -328,8 +348,10 @@ DudeFootball.Play.prototype = {
             if (tiempo_queda < 10){
                 metecero = "0";
             }
-            this.tiempo.text = metecero+tiempo_queda;
+            this.tiempo.text = "0:"+metecero+tiempo_queda;
         }
+
+        
         this.texto_previo.text = "";
 
         if(this.centrando_time > this.time.now){
@@ -412,6 +434,37 @@ DudeFootball.Play.prototype = {
         }
 
 
+    },
+
+    fin_del_partido: function(){
+
+        this.music.stop();
+        this.texto_final.text = "fin     del    partido!\n"+this.score1 + " - " + this.score2 + "\n Volver     a    jugar";
+
+        if (this.score2 > this.score1){
+            for (var i = 0; i < this.equipo_jugador.jugadores.length; i++) { 
+                this.equipo_jugador.jugadores[i].aturdir();
+            }
+        }
+        if (this.score2 < this.score1){
+            for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
+                this.equipo_CPU.jugadores[i].aturdir();
+            }
+        }
+        if (this.score1 == this.score2){
+            for (var i = 0; i < this.equipo_CPU.jugadores.length; i++) { 
+                this.equipo_CPU.jugadores[i].aturdir();
+                this.equipo_jugador.jugadores[i].aturdir();
+            }
+        }
+
+        this.texto_final.inputEnabled = true;
+        this.texto_final.input.sprite.events.onInputDown.add(this.volver_a_jugar, this);
+
+    },
+
+    volver_a_jugar: function(){
+        this.game.state.start(this.game.state.current);
     },
 
     pinta_minimapa: function(){
@@ -995,7 +1048,16 @@ DudeFootball.Play.prototype = {
         if (this.pulsa_A){
             this.potencia += 1;
         }
-        var corta = new Phaser.Rectangle(0, 0, this.potencia, 30);
+
+        console
+        if (this.potencia > this.game.max_potencia){
+            this.super_potencia_sprite.alpha = 1;
+        }
+        else{
+            this.super_potencia_sprite.alpha = 0;
+        }
+
+        var corta = new Phaser.Rectangle(0, 0, this.potencia*1.4, 48);
         corta.fixedToCamera = true;
         this.cargador1.crop(corta); 
     },
@@ -1273,7 +1335,7 @@ DudeFootball.Play.prototype = {
         this.pelota.sprite.body.collideWorldBounds = false;
     },
 
-    rebota_portero: function () {
+    rebota_portero: function (cpu) {
         //Seteo que se está centrando
         this.pelota.superdisparo = false;
         this.pelota.superdisparo_time = this.game.time.now 
@@ -1289,7 +1351,7 @@ DudeFootball.Play.prototype = {
         //cambio la velocidad y de la pelota
         this.pelota.sprite.body.velocity.y = - this.velocidad_centro_y;
         
-        if(this.pelota.sprite.body.velocity.x>0){
+        if(cpu){
             this.pelota.sprite.body.velocity.x = - this.velocidad_centro_x;
         }
         else{
@@ -1863,7 +1925,7 @@ DudeFootball.Play.prototype = {
             probabilidad_rebote = Math.random()*5;
         }
         if (probabilidad_rebote > 4){
-            this.rebota_portero();
+            this.rebota_portero(false);
         }
         else{
             this.equipo_jugador.portero.sprite.animations.play('coge_pelota');
@@ -1888,7 +1950,7 @@ DudeFootball.Play.prototype = {
             probabilidad_rebote = Math.random()*5;
         }
         if (probabilidad_rebote > 4){
-            this.rebota_portero();
+            this.rebota_portero(true);
         }
         else{
             this.equipo_CPU.portero.sprite.animations.play('coge_pelota');

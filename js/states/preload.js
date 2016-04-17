@@ -6,11 +6,11 @@ DudeFootball.Preload = function (game) {
 
 DudeFootball.Preload.prototype = {
     preload: function() {
-        this.preloader = this.add.sprite(this.width/2,this.height/2, 'preloader');
+        this.preloader = this.add.sprite(window.innerWidth/2, window.innerHeight/2, 'preloader');
         this.preloader.anchor.setTo(0.5, 0.5);
 
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
-        this.load.setPreloadSprite(this.preloader);
+        //this.load.setPreloadSprite(this.preloader);
         this.load.spritesheet('jugador','assets/jugador.png',72,100);
         this.load.spritesheet('jugador_cpu','assets/jugador_cpu.png',72,100);
         
@@ -37,13 +37,15 @@ DudeFootball.Preload.prototype = {
         this.load.spritesheet('botonB', 'assets/botonB.png',120,120);
 
         this.load.image('cargador1', 'assets/cargador.png');
+        this.load.image('wrapper_cargador', 'assets/wrapper_cargador.png');
+        this.load.image('super_potencia_sprite', 'assets/super_potencia.png');
 
         this.load.audio('musica', ['assets/game_music.mp3', 'assets/game_music.ogg']);
 
 
     },
     create: function() {
-        this.preloader.cropEnabled = false;
+        //this.preloader.cropEnabled = false;
     },
     update: function() {
         if(!!this.ready) {

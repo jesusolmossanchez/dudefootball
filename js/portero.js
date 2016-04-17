@@ -4,13 +4,13 @@ function Portero(juego, x, y, cpu){
     if(cpu){
         this.sprite = juego.add.sprite (x, y,'portero_cpu');
         this.is_cpu = true;
-        this.area = new Phaser.Rectangle(juego.ancho_campo-800, juego.alto_campo/2-300, 800, 600);
+        this.area = new Phaser.Rectangle(juego.ancho_campo-700, juego.alto_campo/2-300, 700, 600);
         this.sprite.scale.x = -1;
     }
     else{
         this.sprite = juego.add.sprite (x, y,'portero');
         this.is_cpu = false;
-        this.area = new Phaser.Rectangle(0, juego.alto_campo/2-300, 800, 600);
+        this.area = new Phaser.Rectangle(0, juego.alto_campo/2-300, 700, 600);
     }
 
     this.sprite.anchor.setTo(0.5, 0.5);

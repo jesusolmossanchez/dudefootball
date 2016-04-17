@@ -258,10 +258,13 @@ function Player(juego, x, y, cpu){
         return dist;
     }
 
-    this.aturdir = function(posicion) {
+    this.aturdir = function() {
         //console.log("me quedo loco!");
 
-        this.sprite.angle = Math.random()>0.5 ? -90 : 90;
+        if (this.sprite.angle == 0){
+            this.sprite.angle = Math.random()>0.5 ? -90 : 90;
+        }
+        
         this.sprite.animations.play('aturdido');
         this.controlando = false;
         this.aturdido_time = juego.time.now + juego.tiempo_aturdido;
